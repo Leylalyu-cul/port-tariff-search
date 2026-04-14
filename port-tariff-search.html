@@ -38,9 +38,7 @@
   .logo-icon { font-size: 2rem; }
   .logo-text h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.02em; }
   .logo-text p { font-size: 0.78rem; opacity: 0.8; margin-top: 1px; }
-  .lang-switcher {
-    display: flex; gap: 6px;
-  }
+  .lang-switcher { display: flex; gap: 6px; }
   .lang-btn {
     background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35);
     color: #fff; border-radius: 20px; padding: 5px 16px; cursor: pointer;
@@ -78,120 +76,105 @@
     background: #fafbfc; transition: border-color 0.2s;
     outline: none;
   }
-  .search-field input:focus, .search-field select:focus { border-color: var(--accent2); background: #fff; }
-  .search-btn {
-    background: linear-gradient(135deg, #0a2d6b, #1a4fa0); color: #fff;
-    border: none; border-radius: 8px; padding: 10px 28px;
-    font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
-    height: 40px; white-space: nowrap;
-  }
-  .search-btn:hover { background: linear-gradient(135deg, #0d3d8f, #1e5cb8); transform: translateY(-1px); }
-  .reset-btn {
-    background: #fff; color: var(--muted); border: 1.5px solid var(--border);
-    border-radius: 8px; padding: 10px 18px; font-size: 0.9rem; cursor: pointer;
-    height: 40px; transition: all 0.2s;
-  }
-  .reset-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+  .search-field input:focus, .search-field select:focus { border-color: var(--primary-light); background: #fff; }
 
   /* ===== REGION TABS ===== */
-  .region-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-  .rtab {
-    padding: 7px 18px; border-radius: 22px; font-size: 0.85rem; font-weight: 600;
-    cursor: pointer; border: 2px solid transparent; transition: all 0.18s; white-space: nowrap;
+  .region-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
   }
-  .rtab.all { background: var(--primary); color: #fff; }
-  .rtab.china { background: #ffeaea; color: #c0392b; border-color: #f5b5b5; }
-  .rtab.taiwan { background: #e8f4ff; color: #0a6aad; border-color: #aad4f5; }
-  .rtab.hk { background: #fff3e0; color: #b76a00; border-color: #ffd699; }
-  .rtab.sea { background: #e8fff4; color: #0a6a48; border-color: #8fe0bf; }
-  .rtab.redsea { background: #fce8e8; color: #9b2020; border-color: #f0aaaa; }
-  .rtab.turkey { background: #f0e8ff; color: #5c0fa0; border-color: #c8a5f0; }
-  .rtab.blacksea { background: #e8eeff; color: #1a38a8; border-color: #a5b5f0; }
-  .rtab:hover, .rtab.active { filter: brightness(0.93); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-  .rtab.all.active { background: var(--accent); }
+  .region-tab {
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 7px 16px; cursor: pointer; font-size: 0.85rem; color: var(--text);
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .region-tab:hover { border-color: var(--primary-light); color: var(--primary-light); }
+  .region-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 
-  /* ===== STATS BAR ===== */
-  .stats-bar {
-    display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 18px;
+  /* ===== STATS ===== */
+  .stats {
+    display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap;
   }
-  .stat-card {
-    background: var(--card); border-radius: 10px; padding: 14px 20px;
-    box-shadow: 0 1px 6px rgba(10,45,107,0.07); flex: 1; min-width: 130px;
-    display: flex; align-items: center; gap: 12px;
+  .stat-chip {
+    background: var(--card); border-radius: 8px; padding: 8px 16px;
+    font-size: 0.82rem; box-shadow: 0 1px 4px rgba(10,45,107,0.06);
   }
-  .stat-icon { font-size: 1.6rem; }
-  .stat-num { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-  .stat-label { font-size: 0.72rem; color: var(--muted); }
+  .stat-chip strong { color: var(--primary); font-size: 1.1rem; }
 
   /* ===== TABLE ===== */
-  .table-wrapper {
-    background: var(--card); border-radius: 14px;
-    box-shadow: 0 2px 16px rgba(10,45,107,0.08); overflow: hidden;
+  .table-wrap {
+    background: var(--card); border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(10,45,107,0.08);
   }
-  .table-header {
-    padding: 16px 22px; display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--border);
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    background: var(--primary); color: #fff; padding: 12px 14px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-align: left;
+    white-space: nowrap; position: sticky; top: 0;
   }
-  .table-header h3 { font-size: 1rem; font-weight: 700; }
-  .table-header span { font-size: 0.82rem; color: var(--muted); }
-  .disclaimer {
-    padding: 10px 22px; background: #fffbf0; border-bottom: 1px solid #ffe5a0;
-    font-size: 0.78rem; color: #8a6000; display: flex; align-items: center; gap: 6px;
+  tbody tr { border-bottom: 1px solid #e8edf3; transition: background 0.15s; }
+  tbody tr:hover { background: #f0f5ff; }
+  tbody td { padding: 11px 14px; font-size: 0.88rem; vertical-align: top; line-height: 1.5; }
+  .rate-cell { font-weight: 700; color: var(--primary); font-size: 0.95rem; white-space: nowrap; }
+  .fee-badge {
+    display: inline-block; background: #e8f0fd; color: var(--primary-light);
+    border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 600;
   }
-  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-  thead { background: linear-gradient(90deg, #0a2d6b, #1357b8); color: #fff; }
-  th { padding: 12px 14px; text-align: left; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
-  td { padding: 11px 14px; border-bottom: 1px solid #edf2f8; vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f4f8ff; }
-  .port-name { font-weight: 700; color: var(--primary); }
-  .port-name-en { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-  .region-badge {
-    display: inline-block; border-radius: 12px; padding: 2px 10px; font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+  .source-link { color: var(--accent2); text-decoration: none; font-size: 0.82rem; }
+  .source-link:hover { text-decoration: underline; }
+  .note-text { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+  .box-type-badge {
+    display: inline-block; border-radius: 4px; padding: 2px 8px;
+    font-size: 0.76rem; font-weight: 700; white-space: nowrap;
   }
-  .badge-china { background: #ffeaea; color: #c0392b; }
-  .badge-taiwan { background: #e8f4ff; color: #0a6aad; }
-  .badge-hk { background: #fff3e0; color: #b76a00; }
-  .badge-sea { background: #e8fff4; color: #0a6a48; }
-  .badge-redsea { background: #fce8e8; color: #9b2020; }
-  .badge-turkey { background: #f0e8ff; color: #5c0fa0; }
-  .badge-blacksea { background: #e8eeff; color: #1a38a8; }
-  .fee-val { font-weight: 700; color: var(--green); }
-  .fee-unit { font-size: 0.72rem; color: var(--muted); }
-  .link-btn {
-    display: inline-block; background: #eaf2ff; color: var(--accent2);
-    border-radius: 6px; padding: 3px 10px; font-size: 0.78rem; font-weight: 600;
-    text-decoration: none; transition: all 0.2s; border: 1px solid #c0d8f5;
-  }
-  .link-btn:hover { background: var(--accent2); color: #fff; }
-  .no-results { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .no-results .icon { font-size: 3rem; margin-bottom: 12px; }
+  .box-20 { background: #e3f2fd; color: #1565c0; }
+  .box-40 { background: #e8f5e9; color: #2e7d32; }
+  .box-gp  { background: #fff3e0; color: #e65100; }
+  .box-dg  { background: #fce4ec; color: #c62828; }
+  .box-rf  { background: #e0f7fa; color: #00695c; }
+  .box-hv  { background: #f3e5f5; color: #6a1b9a; }
+  .box-mt  { background: #f5f5f5; color: #616161; }
 
   /* ===== PAGINATION ===== */
-  .pagination {
-    display: flex; justify-content: center; align-items: center; gap: 6px;
-    padding: 18px; border-top: 1px solid var(--border);
-  }
+  .pagination { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; flex-wrap: wrap; gap: 10px; }
+  .page-info { font-size: 0.82rem; color: var(--muted); }
+  .page-btns { display: flex; gap: 6px; }
   .page-btn {
-    width: 34px; height: 34px; border-radius: 7px; border: 1.5px solid var(--border);
-    background: #fff; cursor: pointer; font-size: 0.88rem; color: var(--text);
-    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    background: #eef2f7; border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 12px; cursor: pointer; font-size: 0.82rem; color: var(--text);
+    transition: all 0.2s;
   }
+  .page-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
   .page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .page-btn:hover:not(.active) { border-color: var(--accent2); color: var(--accent2); }
+  .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  /* ===== FOOTER ===== */
-  footer {
-    background: #0a1f45; color: rgba(255,255,255,0.65);
-    text-align: center; padding: 22px 20px;
-    font-size: 0.8rem; line-height: 1.8;
+  /* ===== LEGEND ===== */
+  .box-legend {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+    padding: 10px 16px; background: var(--card); border-radius: 8px;
+    border: 1px solid var(--border); font-size: 0.78rem;
   }
-  footer strong { color: rgba(255,255,255,0.9); }
+  .box-legend span { display: flex; align-items: center; gap: 4px; }
+  .box-legend .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-20 { background: #1565c0; }
+  .dot-40 { background: #2e7d32; }
+  .dot-gp { background: #e65100; }
+  .dot-dg { background: #c62828; }
+  .dot-rf { background: #00695c; }
+  .dot-hv { background: #6a1b9a; }
+  .dot-mt { background: #9e9e9e; }
 
+  /* ===== DISCLAIMER ===== */
+  .disclaimer {
+    margin-top: 20px; padding: 14px 18px; background: #fff8e1; border-radius: 8px;
+    border-left: 4px solid var(--accent); font-size: 0.8rem; color: #5d4037; line-height: 1.6;
+  }
+
+  /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
-    .hero h2 { font-size: 1.3rem; }
-    th:nth-child(5), td:nth-child(5),
-    th:nth-child(6), td:nth-child(6) { display: none; }
+    .search-field { min-width: 160px; }
+    thead th, tbody td { padding: 8px 8px; font-size: 0.8rem; }
+    .header-inner { padding: 12px 16px; }
+    .hero { padding: 28px 16px 24px; }
   }
 </style>
 </head>
@@ -202,20 +185,20 @@
     <div class="logo">
       <span class="logo-icon">⚓</span>
       <div class="logo-text">
-        <h1 id="hdr-title">港口公共费率查询系统</h1>
-        <p id="hdr-sub">Port Public Tariff Search System</p>
+        <h1 id="logo-title">全球港口公共费率查询</h1>
+        <p>Port Public Tariff Search</p>
       </div>
     </div>
     <div class="lang-switcher">
-      <button class="lang-btn active" onclick="setLang('zh')" id="btn-zh">中文</button>
-      <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 </header>
 
 <div class="hero">
-  <h2 id="hero-title">全球重点航区港口公共费率查询</h2>
-  <p id="hero-sub">涵盖中国、台湾、香港、东南亚、红海、土耳其、黑海全港口 · 实时公开费率数据参考</p>
+  <h2>全球港口公共费率速查</h2>
+  <p id="hero-sub">覆盖中国大陆 · 台湾 · 香港 · 东南亚 · 红海 · 土耳其 · 黑海</p>
   <div class="regions">
     <span class="region-tag">🇨🇳 中国大陆</span>
     <span class="region-tag">🇹🇼 台湾</span>
@@ -229,141 +212,120 @@
 
 <div class="main">
 
-  <!-- SEARCH BAR -->
+  <!-- Search -->
   <div class="search-bar">
-    <div class="search-field" style="flex:2; min-width:240px;">
-      <label id="lbl-kw">关键词搜索 / Keyword</label>
-      <input type="text" id="inp-kw" placeholder="港口名称 / Port name..." oninput="doSearch()">
-    </div>
-    <div class="search-field">
-      <label id="lbl-region">地区 / Region</label>
-      <select id="sel-region" onchange="doSearch()">
-        <option value="all" id="opt-all">全部 / All</option>
-        <option value="china">中国大陆 / China Mainland</option>
-        <option value="taiwan">台湾 / Taiwan</option>
-        <option value="hk">香港 / Hong Kong</option>
-        <option value="sea">东南亚 / Southeast Asia</option>
-        <option value="redsea">红海 / Red Sea</option>
-        <option value="turkey">土耳其 / Turkey</option>
-        <option value="blacksea">黑海 / Black Sea</option>
-      </select>
+    <div class="search-field" style="flex:2;min-width:260px;">
+      <label id="lbl-kw">关键词 / Keyword</label>
+      <input id="inp-kw" type="text" placeholder="港口名称、国家、费用类型..." oninput="renderTable()">
     </div>
     <div class="search-field">
       <label id="lbl-type">费用类型 / Fee Type</label>
-      <select id="sel-type" onchange="doSearch()">
-        <option value="all">全部 / All</option>
-        <option value="port">港口费 / Port Dues</option>
-        <option value="pilotage">引航费 / Pilotage</option>
-        <option value="towage">拖轮费 / Towage</option>
-        <option value="mooring">系泊费 / Mooring</option>
-        <option value="terminal">码头操作费 / Terminal Handling</option>
-        <option value="berth">泊位费 / Berth Dues</option>
+      <select id="sel-type" onchange="renderTable()">
+        <option value="all">全部 All</option>
+        <option value="port">港口费 Port Dues</option>
+        <option value="pilotage">引航费 Pilotage</option>
+        <option value="towage">拖轮费 Towage</option>
+        <option value="mooring">系泊费 Mooring</option>
+        <option value="thc">码头操作费 THC</option>
+        <option value="berth">泊位费 Berth Dues</option>
       </select>
     </div>
     <div class="search-field">
       <label id="lbl-currency">货币 / Currency</label>
-      <select id="sel-currency" onchange="doSearch()">
-        <option value="all">全部 / All</option>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="CNY">CNY</option>
-        <option value="local">本地货币 / Local</option>
+      <select id="sel-currency" onchange="renderTable()">
+        <option value="all">全部 All</option>
+        <option value="CNY">CNY 人民币</option>
+        <option value="USD">USD 美元</option>
+        <option value="EUR">EUR 欧元</option>
+        <option value="HKD">HKD 港币</option>
+        <option value="SGD">SGD 新币</option>
+        <option value="NTD">NTD 台币</option>
+        <option value="local">本地货币 Other</option>
       </select>
     </div>
-    <button class="search-btn" onclick="doSearch()" id="btn-search">🔍 搜索 / Search</button>
-    <button class="reset-btn" onclick="resetSearch()" id="btn-reset">重置 / Reset</button>
+    <div class="search-field" id="box-type-filter-wrap" style="display:none;">
+      <label>箱型 / Box Type</label>
+      <select id="sel-box-type" onchange="renderTable()">
+        <option value="all">全部 All</option>
+        <option value="CNY">20' 普柜 20' GP</option>
+        <option value="CQY">40' 普柜 40' GP</option>
+        <option value="WPY">危险品 DG</option>
+        <option value="LDY">冷冻箱 Reefer</option>
+        <option value="ZGY">重柜 Heavy</option>
+        <option value="KGY">空柜 Empty</option>
+      </select>
+    </div>
   </div>
 
-  <!-- REGION TABS -->
-  <div class="region-tabs" id="region-tabs">
-    <span class="rtab all active" onclick="filterRegion('all')" id="tab-all">🌐 全部 / All</span>
-    <span class="rtab china" onclick="filterRegion('china')" id="tab-china">🇨🇳 中国大陆</span>
-    <span class="rtab taiwan" onclick="filterRegion('taiwan')" id="tab-taiwan">🇹🇼 台湾</span>
-    <span class="rtab hk" onclick="filterRegion('hk')" id="tab-hk">🇭🇰 香港</span>
-    <span class="rtab sea" onclick="filterRegion('sea')" id="tab-sea">🌏 东南亚</span>
-    <span class="rtab redsea" onclick="filterRegion('redsea')" id="tab-redsea">🔴 红海</span>
-    <span class="rtab turkey" onclick="filterRegion('turkey')" id="tab-turkey">🇹🇷 土耳其</span>
-    <span class="rtab blacksea" onclick="filterRegion('blacksea')" id="tab-blacksea">🌊 黑海</span>
+  <!-- Region Tabs -->
+  <div class="region-tabs" id="region-tabs"></div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats"></div>
+
+  <!-- Box Type Legend (shows when THC filter active) -->
+  <div class="box-legend" id="box-legend" style="display:none;">
+    <span><span class="dot dot-20"></span>20' GP 普柜</span>
+    <span><span class="dot dot-40"></span>40' GP 普柜</span>
+    <span><span class="dot dot-gp"></span>40' HC 高柜</span>
+    <span><span class="dot dot-dg"></span>危险品 DG</span>
+    <span><span class="dot dot-rf"></span>冷冻箱 Reefer</span>
+    <span><span class="dot dot-hv"></span>重柜 Heavy</span>
+    <span><span class="dot dot-mt"></span>空柜 Empty</span>
   </div>
 
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-card"><span class="stat-icon">🏗️</span><div><div class="stat-num" id="stat-ports">—</div><div class="stat-label" id="stat-ports-lbl">港口总数 / Total Ports</div></div></div>
-    <div class="stat-card"><span class="stat-icon">📋</span><div><div class="stat-num" id="stat-entries">—</div><div class="stat-label" id="stat-entries-lbl">费率条目 / Tariff Entries</div></div></div>
-    <div class="stat-card"><span class="stat-icon">🌍</span><div><div class="stat-num">7</div><div class="stat-label" id="stat-regions-lbl">覆盖地区 / Regions</div></div></div>
-    <div class="stat-card"><span class="stat-icon">🔄</span><div><div class="stat-num">2026</div><div class="stat-label" id="stat-update-lbl">数据年度 / Data Year</div></div></div>
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th id="th-region">区域</th>
+          <th id="th-port">港口</th>
+          <th id="th-country">国家</th>
+          <th id="th-box-type" style="display:none;">箱型</th>
+          <th id="th-fee">费用类型</th>
+          <th id="th-rate">费率</th>
+          <th id="th-basis">计费单位</th>
+          <th id="th-note">备注</th>
+          <th id="th-source">来源</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="no-results" style="display:none;text-align:center;padding:40px;color:var(--muted);">
+      未找到匹配结果 / No matching results
+    </div>
   </div>
 
-  <!-- TABLE -->
-  <div class="table-wrapper">
-    <div class="table-header">
-      <h3 id="tbl-title">港口公共费率明细 / Port Public Tariff Details</h3>
-      <span id="tbl-count">加载中... / Loading...</span>
-    </div>
-    <div class="disclaimer">
-      ⚠️ <span id="disclaimer-text">以下费率数据来自各港口公开资料及官方公告，仅供参考，实际费用以港口当局最新公告为准。All rates are for reference only. Please verify with the relevant port authority.</span>
-    </div>
-    <div style="overflow-x:auto;">
-      <table>
-        <thead>
-          <tr>
-            <th id="th-port">港口 / Port</th>
-            <th id="th-country">国家/地区</th>
-            <th id="th-feetype">费用类型 / Fee Type</th>
-            <th id="th-basis">计费基础 / Basis</th>
-            <th id="th-rate">费率 / Rate</th>
-            <th id="th-currency">货币</th>
-            <th id="th-notes">备注 / Notes</th>
-            <th id="th-source">来源 / Source</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-    <div id="no-results" class="no-results" style="display:none;">
-      <div class="icon">🔍</div>
-      <div id="no-results-text">未找到匹配结果 / No results found</div>
-    </div>
-    <div class="pagination" id="pagination"></div>
+  <!-- Pagination -->
+  <div class="pagination" id="pagination"></div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer" id="disclaimer">
+    ⚠️ 本工具所列费率为公开发布的参考信息，实际费率以各港口官方公告为准。费用可能因航线、货物类型、箱型、船型及泊位情况而有所不同。建议在订舱前与目的港代理确认最新费率。
   </div>
 
 </div>
 
-<footer>
-  <strong>港口公共费率查询系统 | Port Public Tariff Search System</strong><br>
-  数据来源：各港口官方网站、IMO资料库、港务局公告 / Sources: Official Port Websites, IMO Database, Port Authority Announcements<br>
-  本系统仅供参考，不构成商业建议 | For reference only, not commercial advice · © 2026
-</footer>
-
 <script>
-// ===== LANGUAGE =====
-let currentLang = 'zh';
+// ===== I18N =====
 const i18n = {
   zh: {
-    'hdr-title': '港口公共费率查询系统',
-    'hero-title': '全球重点航区港口公共费率查询',
-    'hero-sub': '涵盖中国、台湾、香港、东南亚、红海、土耳其、黑海全港口 · 实时公开费率数据参考',
-    'lbl-kw': '关键词搜索',
-    'lbl-region': '地区',
-    'lbl-type': '费用类型',
-    'lbl-currency': '货币',
-    'btn-search': '🔍 搜索',
-    'btn-reset': '重置',
-    'tbl-title': '港口公共费率明细',
+    'logo-title': '全球港口公共费率查询',
+    'hero-sub': '覆盖中国大陆 · 台湾 · 香港 · 东南亚 · 红海 · 土耳其 · 黑海',
+    'lbl-kw': '关键词 / Keyword',
+    'lbl-type': '费用类型 / Fee Type',
+    'lbl-currency': '货币 / Currency',
+    'th-region': '区域',
     'th-port': '港口',
-    'th-country': '国家/地区',
-    'th-feetype': '费用类型',
-    'th-basis': '计费基础',
+    'th-country': '国家',
+    'th-box-type': '箱型',
+    'th-fee': '费用类型',
     'th-rate': '费率',
-    'th-currency': '货币',
-    'th-notes': '备注',
+    'th-basis': '计费单位',
+    'th-note': '备注',
     'th-source': '来源',
-    'stat-ports-lbl': '港口总数',
-    'stat-entries-lbl': '费率条目',
-    'stat-regions-lbl': '覆盖地区',
-    'stat-update-lbl': '数据年度',
-    'no-results-text': '未找到匹配结果，请调整搜索条件',
-    'tab-all': '🌐 全部',
+    'tab-all': '全部 All',
     'tab-china': '🇨🇳 中国大陆',
     'tab-taiwan': '🇹🇼 台湾',
     'tab-hk': '🇭🇰 香港',
@@ -371,41 +333,36 @@ const i18n = {
     'tab-redsea': '🔴 红海',
     'tab-turkey': '🇹🇷 土耳其',
     'tab-blacksea': '🌊 黑海',
+    'disclaimer': '⚠️ 本工具所列费率为公开发布的参考信息，实际费率以各港口官方公告为准。费用可能因航线、货物类型、箱型、船型及泊位情况而有所不同。建议在订舱前与目的港代理确认最新费率。',
   },
   en: {
-    'hdr-title': 'Port Public Tariff Search System',
-    'hero-title': 'Global Key Port Public Tariff Search',
-    'hero-sub': 'Covering China, Taiwan, Hong Kong, Southeast Asia, Red Sea, Turkey, Black Sea · Reference for published port tariffs',
-    'lbl-kw': 'Keyword Search',
-    'lbl-region': 'Region',
+    'logo-title': 'Global Port Public Tariff Search',
+    'hero-sub': 'China · Taiwan · Hong Kong · SE Asia · Red Sea · Turkey · Black Sea',
+    'lbl-kw': 'Keyword',
     'lbl-type': 'Fee Type',
     'lbl-currency': 'Currency',
-    'btn-search': '🔍 Search',
-    'btn-reset': 'Reset',
-    'tbl-title': 'Port Public Tariff Details',
+    'th-region': 'Region',
     'th-port': 'Port',
-    'th-country': 'Country/Region',
-    'th-feetype': 'Fee Type',
-    'th-basis': 'Basis',
+    'th-country': 'Country',
+    'th-box-type': 'Box Type',
+    'th-fee': 'Fee Type',
     'th-rate': 'Rate',
-    'th-currency': 'Currency',
-    'th-notes': 'Notes',
+    'th-basis': 'Unit',
+    'th-note': 'Notes',
     'th-source': 'Source',
-    'stat-ports-lbl': 'Total Ports',
-    'stat-entries-lbl': 'Tariff Entries',
-    'stat-regions-lbl': 'Regions',
-    'stat-update-lbl': 'Data Year',
-    'no-results-text': 'No results found. Please adjust your search criteria.',
-    'tab-all': '🌐 All',
-    'tab-china': '🇨🇳 China Mainland',
+    'tab-all': '全部 All',
+    'tab-china': '🇨🇳 China',
     'tab-taiwan': '🇹🇼 Taiwan',
     'tab-hk': '🇭🇰 Hong Kong',
     'tab-sea': '🌏 SE Asia',
     'tab-redsea': '🔴 Red Sea',
     'tab-turkey': '🇹🇷 Turkey',
     'tab-blacksea': '🌊 Black Sea',
+    'disclaimer': '⚠️ Rates shown are publicly available reference information only. Actual rates are subject to official port announcements. Fees may vary by route, cargo type, container type, vessel size and berth availability. Confirm with destination agents before booking.',
   }
 };
+
+let currentLang = 'zh';
 
 function setLang(lang) {
   currentLang = lang;
@@ -416,76 +373,228 @@ function setLang(lang) {
     const el = document.getElementById(id);
     if (el) el.textContent = val;
   }
-  document.getElementById('inp-kw').placeholder = lang==='zh'? '港口名称...' : 'Port name...';
+  document.getElementById('inp-kw').placeholder = lang==='zh'? '港口名称、国家、费用类型...' : 'Port name, country, fee type...';
   renderTable();
 }
 
 // ===== DATA =====
+// box_type: CNY=20'普柜, CQY=40'普柜, WPY=危险品DG, LDY=冷冻箱RF, ZGY=重柜HV, KGY=空柜MT, 空=非THC
 const DATA = [
-  // ---- 中国大陆 ----
-  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.158',currency:'CNY',note_zh:'每GT·次，适用国际航线',note_en:'Per GT per call, international voyage',source:'上海港务局',src_url:'https://www.portshanghai.com.cn'},
-  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT-based scale',rate:'0.23–0.58',currency:'CNY',note_zh:'GT<10000: 0.58/GT；>50000: 0.23/GT',note_en:'GT<10000: 0.58; >50000: 0.23',source:'交通运输部',src_url:'https://www.mot.gov.cn'},
-  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'拖轮费',fee_en:'Towage',basis_zh:'按马力·小时',basis_en:'Per HP·hour',rate:'80–120',currency:'CNY',note_zh:'每马力每小时，最低2小时',note_en:'Min. 2 hours',source:'上海港务局',src_url:'https://www.portshanghai.com.cn'},
-  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.152',currency:'CNY',note_zh:'国际航线适用，沿海另计',note_en:'International voyages',source:'宁波港',src_url:'https://www.nbport.com.cn'},
-  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT-based scale',rate:'0.21–0.55',currency:'CNY',note_zh:'分7档，超60000 GT单独议价',note_en:'7 tiers, >60000 GT negotiable',source:'交通运输部',src_url:'https://www.mot.gov.cn'},
-  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每TEU',basis_en:'Per TEU',rate:'520–720',currency:'CNY',note_zh:'20\' 标箱，含装卸吊装',note_en:'20\' dry, incl. crane ops',source:'深圳港',src_url:'https://www.szport.net'},
-  {region:'china',port_zh:'广州港',port_en:'Guangzhou Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'系泊费',fee_en:'Mooring/Unmooring',basis_zh:'每次',basis_en:'Per operation',rate:'1,800–3,500',currency:'CNY',note_zh:'按船长分3档',note_en:'3 tiers by LOA',source:'广州港',src_url:'https://www.gzport.com'},
-  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'0.11',currency:'CNY',note_zh:'靠泊期间按自然日计',note_en:'Per calendar day alongside',source:'天津港',src_url:'https://www.tjport.com'},
-  {region:'china',port_zh:'青岛港',port_en:'Qingdao Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.148',currency:'CNY',note_zh:'国际航线',note_en:'International voyages',source:'青岛港',src_url:'https://www.qdport.com'},
-  {region:'china',port_zh:'厦门港',port_en:'Xiamen Port',country_zh:'中国大陆',country_en:'China Mainland',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT-based',rate:'0.22–0.56',currency:'CNY',note_zh:'分6档',note_en:'6 tiers',source:'厦门港务',src_url:'https://www.xiamenport.com'},
+  // ============ 中国大陆 ============
+  // 上海港 - 港口费
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.158',currency:'CNY',note_zh:'每GT·次，国际航线适用',note_en:'Per GT per call, international',source:'上海港务局',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - 引航费
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT-based scale',rate:'0.23–0.58',currency:'CNY',note_zh:'GT<10000: 0.58/GT；>50000: 0.23/GT',note_en:'GT<10000: 0.58; >50000: 0.23',source:'交通运输部',src_url:'https://www.mot.gov.cn'},
+  // 上海港 - 拖轮费
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'拖轮费',fee_en:'Towage',basis_zh:'按马力·小时',basis_en:'Per HP·hour',rate:'80–120',currency:'CNY',note_zh:'每马力每小时，最低2小时',note_en:'Min. 2 hours',source:'上海港务局',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - THC 20'普柜
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 185',currency:'CNY',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'含装卸、吊装、预配等综合操作费',note_en:'Incl. loading/unloading, crane ops, documentation',source:'上港集团',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - THC 40'普柜
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 280',currency:'CNY',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'含装卸、吊装、预配等综合操作费',note_en:'Incl. loading/unloading, crane ops, documentation',source:'上港集团',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - THC 高柜
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 310',currency:'CNY',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'含装卸、吊装、预配等综合操作费',note_en:'Incl. loading/unloading, crane ops, documentation',source:'上港集团',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - THC 危险品
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 320',currency:'CNY',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'含危品申报、监装、安管附加',note_en:'Incl. DG declaration, supervision surcharge',source:'上港集团',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - THC 冷冻箱
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 450',currency:'CNY',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'含插电、监控、温度记录仪附加',note_en:'Incl. reefer plug, monitoring surcharge',source:'上港集团',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - THC 重柜
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 250',currency:'CNY',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy/High-weight',note_zh:'超重箱附加（>20ft: >25T；<20ft: >20T）',note_en:'Surcharge for overweight containers',source:'上港集团',src_url:'https://www.portshanghai.com.cn'},
+  // 上海港 - THC 空柜
+  {region:'china',port_zh:'上海港',port_en:'Shanghai Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 155',currency:'CNY',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty Container',note_zh:'空箱调箱、堆存综合费',note_en:'Empty container handling & storage',source:'上港集团',src_url:'https://www.portshanghai.com.cn'},
 
-  // ---- 台湾 ----
+  // 宁波舟山港
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.152',currency:'CNY',note_zh:'国际航线适用，沿海另计',note_en:'International voyages',source:'宁波港',src_url:'https://www.nbport.com.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT-based scale',rate:'0.21–0.55',currency:'CNY',note_zh:'分7档，超60000 GT单独议价',note_en:'7 tiers, >60000 GT negotiable',source:'交通运输部',src_url:'https://www.mot.gov.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 175',currency:'CNY',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'综合操作费',note_en:'Comprehensive handling',source:'宁波舟山港',src_url:'https://www.nbport.com.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 265',currency:'CNY',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'综合操作费',note_en:'Comprehensive handling',source:'宁波舟山港',src_url:'https://www.nbport.com.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 300',currency:'CNY',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'综合操作费',note_en:'Comprehensive handling',source:'宁波舟山港',src_url:'https://www.nbport.com.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 310',currency:'CNY',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'宁波舟山港',src_url:'https://www.nbport.com.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 420',currency:'CNY',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'宁波舟山港',src_url:'https://www.nbport.com.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 235',currency:'CNY',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Overweight surcharge',source:'宁波舟山港',src_url:'https://www.nbport.com.cn'},
+  {region:'china',port_zh:'宁波舟山港',port_en:'Ningbo-Zhoushan Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 148',currency:'CNY',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱调箱综合费',note_en:'Empty handling',source:'宁波舟山港',src_url:'https://www.nbport.com.cn'},
+
+  // 深圳港
+  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 580',currency:'CNY',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'含装卸、吊装、预配',note_en:'Incl. loading/unloading, crane ops',source:'深圳港',src_url:'https://www.szport.net'},
+  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 880',currency:'CNY',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'含装卸、吊装、预配',note_en:'Incl. loading/unloading, crane ops',source:'深圳港',src_url:'https://www.szport.net'},
+  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 980',currency:'CNY',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'含装卸、吊装、预配',note_en:'Incl. loading/unloading, crane ops',source:'深圳港',src_url:'https://www.szport.net'},
+  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 1,050',currency:'CNY',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'深圳港',src_url:'https://www.szport.net'},
+  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 1,200',currency:'CNY',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'深圳港',src_url:'https://www.szport.net'},
+  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 750',currency:'CNY',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Overweight surcharge',source:'深圳港',src_url:'https://www.szport.net'},
+  {region:'china',port_zh:'深圳港',port_en:'Shenzhen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 480',currency:'CNY',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'深圳港',src_url:'https://www.szport.net'},
+
+  // 广州港
+  {region:'china',port_zh:'广州港',port_en:'Guangzhou Port',country_zh:'中国大陆',country_en:'China',fee_zh:'系泊费',fee_en:'Mooring/Unmooring',basis_zh:'每次',basis_en:'Per operation',rate:'1,800–3,500',currency:'CNY',note_zh:'按船长分3档',note_en:'3 tiers by LOA',source:'广州港',src_url:'https://www.gzport.com'},
+
+  // 天津港
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'0.11',currency:'CNY',note_zh:'靠泊期间按自然日计',note_en:'Per calendar day alongside',source:'天津港',src_url:'https://www.tjport.com'},
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 560',currency:'CNY',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'含装卸、吊装',note_en:'Incl. loading/unloading, crane ops',source:'天津港',src_url:'https://www.tjport.com'},
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 850',currency:'CNY',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'含装卸、吊装',note_en:'Incl. loading/unloading, crane ops',source:'天津港',src_url:'https://www.tjport.com'},
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 950',currency:'CNY',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'含装卸、吊装',note_en:'Incl. loading/unloading, crane ops',source:'天津港',src_url:'https://www.tjport.com'},
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 1,000',currency:'CNY',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'天津港',src_url:'https://www.tjport.com'},
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 1,180',currency:'CNY',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'天津港',src_url:'https://www.tjport.com'},
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 720',currency:'CNY',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Overweight surcharge',source:'天津港',src_url:'https://www.tjport.com'},
+  {region:'china',port_zh:'天津港',port_en:'Tianjin Port',country_zh:'中国大陆',country_en:'China',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'CNY 460',currency:'CNY',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'天津港',src_url:'https://www.tjport.com'},
+
+  // 青岛港
+  {region:'china',port_zh:'青岛港',port_en:'Qingdao Port',country_zh:'中国大陆',country_en:'China',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.148',currency:'CNY',note_zh:'国际航线',note_en:'International voyages',source:'青岛港',src_url:'https://www.qdport.com'},
+
+  // 厦门港
+  {region:'china',port_zh:'厦门港',port_en:'Xiamen Port',country_zh:'中国大陆',country_en:'China',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT-based',rate:'0.22–0.56',currency:'CNY',note_zh:'分6档',note_en:'6 tiers',source:'厦门港务',src_url:'https://www.xiamenport.com'},
+
+  // ============ 台湾 ============
   {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.28',currency:'NTD',note_zh:'外籍船舶适用',note_en:'Foreign vessels',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
+  {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'NTD 1,680',currency:'NTD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'含装卸、吊装',note_en:'Incl. loading/unloading, crane ops',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
+  {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'NTD 2,520',currency:'NTD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'含装卸、吊装',note_en:'Incl. loading/unloading, crane ops',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
+  {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'NTD 2,850',currency:'NTD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'含装卸、吊装',note_en:'Incl. loading/unloading, crane ops',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
+  {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'NTD 3,200',currency:'NTD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
+  {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'NTD 3,800',currency:'NTD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
+  {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'NTD 2,150',currency:'NTD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
+  {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'NTD 1,380',currency:'NTD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
   {region:'taiwan',port_zh:'高雄港',port_en:'Kaohsiung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT scale',rate:'NTD 12,000–85,000',currency:'NTD',note_zh:'分6档，GT 500以下至GT 80000以上',note_en:'6 tiers',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
   {region:'taiwan',port_zh:'基隆港',port_en:'Keelung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按LOA·天',basis_en:'Per LOA·day',rate:'NTD 5–12/m',currency:'NTD',note_zh:'按船长米每天',note_en:'Per meter LOA per day',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
   {region:'taiwan',port_zh:'台中港',port_en:'Taichung Port',country_zh:'台湾',country_en:'Taiwan',fee_zh:'拖轮费',fee_en:'Towage',basis_zh:'按马力·次',basis_en:'Per HP per operation',rate:'NTD 1.2/HP',currency:'NTD',note_zh:'最低收费NTD 30,000',note_en:'Minimum NTD 30,000',source:'台湾港务公司',src_url:'https://www.twport.com.tw'},
 
-  // ---- 香港 ----
+  // ============ 香港 ============
   {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'0.15',currency:'HKD',note_zh:'船舶每次入港缴纳',note_en:'Per vessel call',source:'香港海事处',src_url:'https://www.mardep.gov.hk'},
-  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每TEU',basis_en:'Per TEU',rate:'USD 85',currency:'USD',note_zh:'20\' 标箱，CY-CY',note_en:'20\' dry container',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
-  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'China Mainland',fee_zh:'泊位费',fee_en:'Buoy Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'0.10',currency:'HKD',note_zh:'适用浮筒锚位',note_en:'Buoy berths only',source:'香港海事处',src_url:'https://www.mardep.gov.hk'},
+  // 香港 THC
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'HKD 665',currency:'HKD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'HIT/MTL/ACT综合操作，CY-CY',note_en:'HIT/MTL/ACT, CY-CY',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'HKD 995',currency:'HKD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'HIT/MTL/ACT综合操作，CY-CY',note_en:'HIT/MTL/ACT, CY-CY',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'HKD 1,120',currency:'HKD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'HIT/MTL/ACT综合操作，CY-CY',note_en:'HIT/MTL/ACT, CY-CY',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'HKD 1,280',currency:'HKD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品申报、监装附加',note_en:'DG declaration & supervision',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'HKD 1,480',currency:'HKD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'插电监控附加',note_en:'Reefer plug & monitoring',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'HKD 850',currency:'HKD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'HKD 540',currency:'HKD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱调箱综合费',note_en:'Empty container handling',source:'HIT/MTL/ACT',src_url:'https://www.hit.com.hk'},
+  {region:'hk',port_zh:'香港港',port_en:'Hong Kong Port',country_zh:'香港',country_en:'Hong Kong',fee_zh:'泊位费',fee_en:'Buoy Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'0.10',currency:'HKD',note_zh:'适用浮筒锚位',note_en:'Buoy berths only',source:'香港海事处',src_url:'https://www.mardep.gov.hk'},
 
-  // ---- 东南亚 ----
-  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port (MPA)',country_zh:'新加坡',country_en:'Singapore',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'SGD 0.11',currency:'SGD',note_zh:'首3天，后续按天递增',note_en:'First 3 days; higher thereafter',source:'MPA Singapore',src_url:'https://www.mpa.gov.sg'},
+  // ============ 东南亚 ============
+  // 新加坡
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'SGD 0.11',currency:'SGD',note_zh:'首3天，后续按天递增',note_en:'First 3 days; higher thereafter',source:'MPA Singapore',src_url:'https://www.mpa.gov.sg'},
   {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT scale',rate:'SGD 200–8,500',currency:'SGD',note_zh:'最低GT 250，最高超200,000 GT',note_en:'Min. 250 GT to 200,000+ GT',source:'MPA Singapore',src_url:'https://www.mpa.gov.sg'},
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'SGD 65',currency:'SGD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'PSA综合码头操作费',note_en:'PSA terminal ops incl.',source:'PSA Singapore',src_url:'https://www.singaporepsa.com'},
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'SGD 98',currency:'SGD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'PSA综合码头操作费',note_en:'PSA terminal ops incl.',source:'PSA Singapore',src_url:'https://www.singaporepsa.com'},
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'SGD 110',currency:'SGD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'PSA综合码头操作费',note_en:'PSA terminal ops incl.',source:'PSA Singapore',src_url:'https://www.singaporepsa.com'},
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'SGD 130',currency:'SGD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加，含申报和监装',note_en:'DG declaration & supervision surcharge',source:'PSA Singapore',src_url:'https://www.singaporepsa.com'},
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'SGD 160',currency:'SGD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱插电监控附加',note_en:'Reefer plug & monitoring',source:'PSA Singapore',src_url:'https://www.singaporepsa.com'},
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'SGD 85',currency:'SGD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'PSA Singapore',src_url:'https://www.singaporepsa.com'},
+  {region:'sea',port_zh:'新加坡港',port_en:'Singapore Port',country_zh:'新加坡',country_en:'Singapore',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'SGD 50',currency:'SGD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱调箱综合费',note_en:'Empty container handling',source:'PSA Singapore',src_url:'https://www.singaporepsa.com'},
+
+  // 巴生港
   {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'MYR 0.28',currency:'MYR',note_zh:'外籍船舶适用',note_en:'For foreign vessels',source:'Klang Port Authority',src_url:'https://www.kpa.com.my'},
-  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'THC',basis_zh:'每TEU',basis_en:'Per TEU',rate:'MYR 420',currency:'MYR',note_zh:'20\' 标箱',note_en:'20\' container',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
-  {region:'sea',port_zh:'雅加达丹戎不碌港',port_en:'Tanjung Priok Jakarta',country_zh:'印度尼西亚',country_en:'Indonesia',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'IDR 35',currency:'IDR',note_zh:'国际航线，按GT·次',note_en:'Per GT per call, intl.',source:'IPC / Pelindo II',src_url:'https://www.indonesiaport.co.id'},
-  {region:'sea',port_zh:'马尼拉港',port_en:'Manila International Container Terminal',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'THC',basis_zh:'每TEU',basis_en:'Per TEU',rate:'USD 92',currency:'USD',note_zh:'20\' 标箱',note_en:'20\' dry',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
-  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'THB 4.5',currency:'THB',note_zh:'外籍船舶',note_en:'Foreign vessel',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
-  {region:'sea',port_zh:'胡志明港',port_en:'Ho Chi Minh City Port',country_zh:'越南',country_en:'Vietnam',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'VND 180',currency:'VND',note_zh:'按日计，含节假日',note_en:'Per calendar day',source:'Vietnam Ports Assoc.',src_url:'https://www.vpa.com.vn'},
-  {region:'sea',port_zh:'仰光港',port_en:'Yangon Port',country_zh:'缅甸',country_en:'Myanmar',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按NRT计',basis_en:'Per NRT',rate:'USD 0.30',currency:'USD',note_zh:'按净注册吨',note_en:'Per Net Registered Ton',source:'MPA Myanmar',src_url:''},
-  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.14',currency:'USD',note_zh:'外籍船舶，每次靠泊',note_en:'Per call, foreign vessels',source:'SLPA',src_url:'https://www.slpa.lk'},
+  // 巴生 THC
+  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'MYR 420',currency:'MYR',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'WCT/NCT综合码头操作',note_en:'WCT/NCT terminal ops',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
+  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'MYR 630',currency:'MYR',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'WCT/NCT综合码头操作',note_en:'WCT/NCT terminal ops',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
+  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'MYR 720',currency:'MYR',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'WCT/NCT综合码头操作',note_en:'WCT/NCT terminal ops',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
+  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'MYR 850',currency:'MYR',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
+  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'MYR 1,100',currency:'MYR',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
+  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'MYR 550',currency:'MYR',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
+  {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'MYR 340',currency:'MYR',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'WCT/NCT',src_url:'https://www.westportsmalaysia.com'},
   {region:'sea',port_zh:'巴生港',port_en:'Port Klang',country_zh:'马来西亚',country_en:'Malaysia',fee_zh:'拖轮费',fee_en:'Towage',basis_zh:'按马力·小时',basis_en:'Per HP·hour',rate:'MYR 1.8',currency:'MYR',note_zh:'最低2小时',note_en:'Min. 2 hours',source:'Klang Port Authority',src_url:'https://www.kpa.com.my'},
 
-  // ---- 红海 ----
+  // 雅加达
+  {region:'sea',port_zh:'雅加达丹戎不碌港',port_en:'Tanjung Priok Jakarta',country_zh:'印度尼西亚',country_en:'Indonesia',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'IDR 35',currency:'IDR',note_zh:'国际航线，按GT·次',note_en:'Per GT per call, intl.',source:'IPC / Pelindo II',src_url:'https://www.indonesiaport.co.id'},
+
+  // 马尼拉
+  {region:'sea',port_zh:'马尼拉港',port_en:'Manila ICTSI',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 92',currency:'USD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'ICTSI马尼拉码头操作费',note_en:'ICTSI Manila terminal ops',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
+  {region:'sea',port_zh:'马尼拉港',port_en:'Manila ICTSI',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 138',currency:'USD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'ICTSI马尼拉码头操作费',note_en:'ICTSI Manila terminal ops',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
+  {region:'sea',port_zh:'马尼拉港',port_en:'Manila ICTSI',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 155',currency:'USD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'ICTSI马尼拉码头操作费',note_en:'ICTSI Manila terminal ops',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
+  {region:'sea',port_zh:'马尼拉港',port_en:'Manila ICTSI',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 180',currency:'USD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
+  {region:'sea',port_zh:'马尼拉港',port_en:'Manila ICTSI',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 220',currency:'USD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
+  {region:'sea',port_zh:'马尼拉港',port_en:'Manila ICTSI',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 118',currency:'USD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
+  {region:'sea',port_zh:'马尼拉港',port_en:'Manila ICTSI',country_zh:'菲律宾',country_en:'Philippines',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 75',currency:'USD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'ICTSI Manila',src_url:'https://www.ictsi.com'},
+
+  // 林查班
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'THB 4.5',currency:'THB',note_zh:'外籍船舶',note_en:'Foreign vessel',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'THB 1,250',currency:'THB',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'PAT林查班码头操作',note_en:'PAT Laem Chabang ops',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'THB 1,880',currency:'THB',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'PAT林查班码头操作',note_en:'PAT Laem Chabang ops',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'THB 2,120',currency:'THB',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'PAT林查班码头操作',note_en:'PAT Laem Chabang ops',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'THB 2,500',currency:'THB',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'THB 3,200',currency:'THB',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'THB 1,620',currency:'THB',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+  {region:'sea',port_zh:'林查班港',port_en:'Laem Chabang Port',country_zh:'泰国',country_en:'Thailand',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'THB 1,020',currency:'THB',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'PAT Thailand',src_url:'https://www.pat.or.th'},
+
+  // 胡志明
+  {region:'sea',port_zh:'胡志明港',port_en:'Ho Chi Minh City Port',country_zh:'越南',country_en:'Vietnam',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'VND 180',currency:'VND',note_zh:'按日计，含节假日',note_en:'Per calendar day',source:'Vietnam Ports Assoc.',src_url:'https://www.vpa.com.vn'},
+
+  // 仰光
+  {region:'sea',port_zh:'仰光港',port_en:'Yangon Port',country_zh:'缅甸',country_en:'Myanmar',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按NRT计',basis_en:'Per NRT',rate:'USD 0.30',currency:'USD',note_zh:'按净注册吨',note_en:'Per Net Registered Ton',source:'MPA Myanmar',src_url:''},
+
+  // 科伦坡
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.14',currency:'USD',note_zh:'外籍船舶，每次靠泊',note_en:'Per call, foreign vessels',source:'SLPA',src_url:'https://www.slpa.lk'},
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 75',currency:'USD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'JCT/CICT综合码头操作',note_en:'JCT/CICT terminal ops',source:'SLPA / JCT',src_url:'https://www.slpa.lk'},
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 113',currency:'USD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'JCT/CICT综合码头操作',note_en:'JCT/CICT terminal ops',source:'SLPA / JCT',src_url:'https://www.slpa.lk'},
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 128',currency:'USD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'JCT/CICT综合码头操作',note_en:'JCT/CICT terminal ops',source:'SLPA / JCT',src_url:'https://www.slpa.lk'},
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 155',currency:'USD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'SLPA / JCT',src_url:'https://www.slpa.lk'},
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 185',currency:'USD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'SLPA / JCT',src_url:'https://www.slpa.lk'},
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 98',currency:'USD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'SLPA / JCT',src_url:'https://www.slpa.lk'},
+  {region:'sea',port_zh:'科伦坡港',port_en:'Colombo Port',country_zh:'斯里兰卡',country_en:'Sri Lanka',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 60',currency:'USD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'SLPA / JCT',src_url:'https://www.slpa.lk'},
+
+  // ============ 红海 ============
+  // 吉达
   {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'SAR 0.10',currency:'SAR',note_zh:'外籍船舶每次靠泊',note_en:'Per call, foreign vessels',source:'Saudi Ports Authority',src_url:'https://www.mawani.gov.sa'},
-  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'THC',basis_zh:'每TEU',basis_en:'Per TEU',rate:'USD 105',currency:'USD',note_zh:'20\' 标箱',note_en:'20\' container',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT scale',rate:'SAR 1,500–18,000',currency:'SAR',note_zh:'分7档',note_en:'7 tiers',source:'Saudi Ports Authority',src_url:'https://www.mawani.gov.sa'},
+  // 吉达 THC
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 105',currency:'USD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'Mawani / NCFS综合码头操作',note_en:'Mawani / NCFS terminal ops',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 158',currency:'USD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'Mawani / NCFS综合码头操作',note_en:'Mawani / NCFS terminal ops',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 178',currency:'USD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'Mawani / NCFS综合码头操作',note_en:'Mawani / NCFS terminal ops',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 210',currency:'USD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加，含监装安管',note_en:'DG declaration & supervision',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 255',currency:'USD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱插电监控',note_en:'Reefer plug & monitoring',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 138',currency:'USD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 85',currency:'USD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'Mawani',src_url:'https://www.mawani.gov.sa'},
+
+  // 胡达达
   {region:'redsea',port_zh:'红海港(胡达达)',port_en:'Hudaydah Port',country_zh:'也门',country_en:'Yemen',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.12',currency:'USD',note_zh:'战争附加险另计',note_en:'War risk surcharge additional',source:'YHPA',src_url:''},
   {region:'redsea',port_zh:'亚喀巴港',port_en:'Aqaba Port',country_zh:'约旦',country_en:'Jordan',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.08',currency:'USD',note_zh:'免税区费率',note_en:'Free Zone rate',source:'Aqaba Port Authority',src_url:'https://www.aqabaports.com.jo'},
   {region:'redsea',port_zh:'苏伊士港',port_en:'Suez Port',country_zh:'埃及',country_en:'Egypt',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.11',currency:'USD',note_zh:'运河过境船舶单独收费',note_en:'Canal transit charged separately',source:'Suez Canal Authority',src_url:'https://www.suezcanal.gov.eg'},
-  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'THC',basis_zh:'每TEU',basis_en:'Per TEU',rate:'USD 120',currency:'USD',note_zh:'20\' 标箱，转运附加',note_en:'20\' dry, transshipment extra',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
+  // 吉布提
+  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 120',currency:'USD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'Djibouti International处理，转运附加',note_en:'DP World Djibouti, transshipment extra',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
+  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 180',currency:'USD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'Djibouti International处理，转运附加',note_en:'DP World Djibouti, transshipment extra',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
+  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 203',currency:'USD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'Djibouti International处理，转运附加',note_en:'DP World Djibouti, transshipment extra',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
+  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 240',currency:'USD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
+  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 295',currency:'USD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
+  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 156',currency:'USD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
+  {region:'redsea',port_zh:'吉布提港',port_en:'Djibouti Port',country_zh:'吉布提',country_en:'Djibouti',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 98',currency:'USD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'PDSA Djibouti',src_url:'https://www.dpworld.com'},
   {region:'redsea',port_zh:'阿德斯港',port_en:'Aden Port',country_zh:'也门',country_en:'Yemen',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'USD 0.09',currency:'USD',note_zh:'现时政治情况影响作业',note_en:'Subject to current political situation',source:'Aden Port Authority',src_url:''},
-  {region:'redsea',port_zh:'吉达伊斯兰港',port_en:'Jeddah Islamic Port',country_zh:'沙特阿拉伯',country_en:'Saudi Arabia',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT scale',rate:'SAR 1,500–18,000',currency:'SAR',note_zh:'分7档',note_en:'7 tiers',source:'Saudi Ports Authority',src_url:'https://www.mawani.gov.sa'},
 
-  // ---- 土耳其 ----
+  // ============ 土耳其 ============
   {region:'turkey',port_zh:'伊斯坦布尔港(安巴尔利)',port_en:'Istanbul Port (Ambarli)',country_zh:'土耳其',country_en:'Turkey',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.18',currency:'USD',note_zh:'外籍船舶，每次靠泊',note_en:'Per call, foreign vessels',source:'Turkish Ministry of Transport',src_url:'https://www.uab.gov.tr'},
   {region:'turkey',port_zh:'伊斯坦布尔港(安巴尔利)',port_en:'Istanbul Port (Ambarli)',country_zh:'土耳其',country_en:'Turkey',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT scale',rate:'USD 300–4,200',currency:'USD',note_zh:'含博斯普鲁斯海峡引航',note_en:'Incl. Bosphorus Strait pilotage',source:'Turkish Pilots Assoc.',src_url:''},
-  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'THC',basis_zh:'每TEU',basis_en:'Per TEU',rate:'USD 88',currency:'USD',note_zh:'20\' 标箱',note_en:'20\' dry container',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  // 伊兹密尔
+  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 88',currency:'EUR',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'TCDD Limancilik码头操作',note_en:'TCDD Limancilik terminal ops',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 132',currency:'EUR',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'TCDD Limancilik码头操作',note_en:'TCDD Limancilik terminal ops',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 150',currency:'EUR',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'TCDD Limancilik码头操作',note_en:'TCDD Limancilik terminal ops',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 175',currency:'EUR',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 210',currency:'EUR',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 115',currency:'EUR',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  {region:'turkey',port_zh:'伊兹密尔港',port_en:'Izmir Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 72',currency:'EUR',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'TCDD Limancilik',src_url:'https://www.tcddlimancilik.gov.tr'},
+  // 梅尔辛
   {region:'turkey',port_zh:'梅尔辛港',port_en:'Mersin Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.16',currency:'USD',note_zh:'地中海最大集装箱港之一',note_en:'One of largest container ports in Med',source:'MIP Mersin',src_url:'https://www.mersinport.com.tr'},
   {region:'turkey',port_zh:'梅尔辛港',port_en:'Mersin Port',country_zh:'土耳其',country_en:'Turkey',fee_zh:'拖轮费',fee_en:'Towage',basis_zh:'按马力·次',basis_en:'Per HP per op',rate:'USD 1.1/HP',currency:'USD',note_zh:'最低2小时',note_en:'Min. 2 hours',source:'MIP Mersin',src_url:'https://www.mersinport.com.tr'},
-  {region:'turkey',port_zh:'安卡拉内陆港(伊斯坦布尔)',port_en:'Haydarpaşa Port Istanbul',country_zh:'土耳其',country_en:'Turkey',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按LOA·天',basis_en:'Per LOA·day',rate:'USD 1.5/m',currency:'USD',note_zh:'按船长米计，每天',note_en:'Per meter LOA per day',source:'TCDD',src_url:'https://www.tcdd.gov.tr'},
+  {region:'turkey',port_zh:'伊斯坦布尔(海达尔帕夏)',port_en:'Haydarpasa Port Istanbul',country_zh:'土耳其',country_en:'Turkey',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按LOA·天',basis_en:'Per LOA·day',rate:'USD 1.5/m',currency:'USD',note_zh:'按船长米计，每天',note_en:'Per meter LOA per day',source:'TCDD',src_url:'https://www.tcdd.gov.tr'},
   {region:'turkey',port_zh:'博斯普鲁斯海峡过境',port_en:'Bosphorus Strait Transit',country_zh:'土耳其',country_en:'Turkey',fee_zh:'海峡引航费',fee_en:'Strait Pilotage',basis_zh:'按GT分级',basis_en:'GT-based',rate:'USD 500–6,000',currency:'USD',note_zh:'强制引航，所有过境船必须申请',note_en:'Compulsory for all transit vessels',source:'Turkish Pilots (IHKIB)',src_url:''},
 
-  // ---- 黑海 ----
+  // ============ 黑海 ============
   {region:'blacksea',port_zh:'敖德萨港',port_en:'Odessa Port',country_zh:'乌克兰',country_en:'Ukraine',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.09',currency:'USD',note_zh:'因战争局势，费率暂停更新',note_en:'Rate updates suspended due to conflict',source:'Odessa Port Authority',src_url:''},
   {region:'blacksea',port_zh:'新罗西斯克港',port_en:'Novorossiysk Port',country_zh:'俄罗斯',country_en:'Russia',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'RUB 15',currency:'RUB',note_zh:'国际制裁下实际可用性受限',note_en:'Access subject to international sanctions',source:'NCSP Russia',src_url:''},
+  // 康斯坦察
   {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'EUR 0.12',currency:'EUR',note_zh:'黑海最大集装箱港',note_en:'Largest container port on Black Sea',source:'CN Administratia Porturilor',src_url:'https://www.portofconstantza.com'},
-  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'THC',basis_zh:'每TEU',basis_en:'Per TEU',rate:'EUR 82',currency:'EUR',note_zh:'20\' 标箱',note_en:'20\' container',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
+  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 82',currency:'EUR',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'CSCT康斯坦察码头操作',note_en:'CSCT Constanta terminal ops',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
+  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 123',currency:'EUR',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'CSCT康斯坦察码头操作',note_en:'CSCT Constanta terminal ops',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
+  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 140',currency:'EUR',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'CSCT康斯坦察码头操作',note_en:'CSCT Constanta terminal ops',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
+  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 165',currency:'EUR',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
+  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 200',currency:'EUR',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
+  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 108',currency:'EUR',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
+  {region:'blacksea',port_zh:'康斯坦察港',port_en:'Constanta Port',country_zh:'罗马尼亚',country_en:'Romania',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'EUR 67',currency:'EUR',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'CSCT Constanta',src_url:'https://www.portofconstantza.com'},
   {region:'blacksea',port_zh:'伊利乔夫斯克港',port_en:'Chornomorsk Port',country_zh:'乌克兰',country_en:'Ukraine',fee_zh:'泊位费',fee_en:'Berth Dues',basis_zh:'按GT·天',basis_en:'Per GT per day',rate:'USD 0.08',currency:'USD',note_zh:'因战争局势，作业受影响',note_en:'Operations affected by conflict',source:'Ukrainian Sea Ports Authority',src_url:''},
   {region:'blacksea',port_zh:'瓦尔纳港',port_en:'Varna Port',country_zh:'保加利亚',country_en:'Bulgaria',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'EUR 0.10',currency:'EUR',note_zh:'黑海主要过境港',note_en:'Key Black Sea transit port',source:'Port of Varna Authority',src_url:'https://www.port-varna.bg'},
   {region:'blacksea',port_zh:'巴统港',port_en:'Batumi Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'港口费',fee_en:'Port Dues',basis_zh:'按GT计',basis_en:'Per GT',rate:'USD 0.13',currency:'USD',note_zh:'外籍船舶',note_en:'Foreign vessel',source:'Batumi Sea Port Authority',src_url:''},
-  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'THC',basis_zh:'每TEU',basis_en:'Per TEU',rate:'USD 95',currency:'USD',note_zh:'20\' 标箱',note_en:'20\' dry container',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
+  // 波季
+  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 95',currency:'USD',box_type:'CNY',box_type_zh:'20\'普柜',box_type_en:'20\' GP',note_zh:'APM Terminals波季码头操作',note_en:'APM Terminals Poti ops',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
+  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 143',currency:'USD',box_type:'CQY',box_type_zh:'40\'普柜',box_type_en:'40\' GP',note_zh:'APM Terminals波季码头操作',note_en:'APM Terminals Poti ops',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
+  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 162',currency:'USD',box_type:'WPY',box_type_zh:'40\'高柜',box_type_en:'40\' HC',note_zh:'APM Terminals波季码头操作',note_en:'APM Terminals Poti ops',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
+  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 190',currency:'USD',box_type:'ZGY',box_type_zh:'危险品',box_type_en:'Dangerous Goods',note_zh:'危品附加',note_en:'DG surcharge',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
+  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 230',currency:'USD',box_type:'LDY',box_type_zh:'冷冻箱',box_type_en:'Reefer',note_zh:'冷藏箱附加',note_en:'Reefer surcharge',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
+  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 124',currency:'USD',box_type:'KGY',box_type_zh:'重柜',box_type_en:'Heavy',note_zh:'超重附加',note_en:'Heavy surcharge',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
+  {region:'blacksea',port_zh:'波季港',port_en:'Poti Sea Port',country_zh:'格鲁吉亚',country_en:'Georgia',fee_zh:'码头操作费',fee_en:'Terminal Handling Charge',basis_zh:'每箱',basis_en:'Per unit',rate:'USD 78',currency:'USD',box_type:'ALL',box_type_zh:'空柜',box_type_en:'Empty',note_zh:'空箱综合费',note_en:'Empty handling',source:'APM Terminals Poti',src_url:'https://www.apmterminals.com'},
   {region:'blacksea',port_zh:'伊斯坦布尔(黑海侧)',port_en:'Istanbul (Black Sea Side)',country_zh:'土耳其',country_en:'Turkey',fee_zh:'引航费',fee_en:'Pilotage',basis_zh:'按GT分级',basis_en:'GT scale',rate:'USD 350–5,000',currency:'USD',note_zh:'经由博斯普鲁斯进出黑海',note_en:'Transit via Bosphorus to/from Black Sea',source:'Turkish Pilots Assoc.',src_url:''},
 ];
 
@@ -494,19 +603,61 @@ let activeRegion = 'all';
 let currentPage = 1;
 const PAGE_SIZE = 15;
 
+const BOX_TYPE_CSS = {
+  CNY: 'box-20',
+  CQY: 'box-40',
+  WPY: 'box-gp',
+  ZGY: 'box-dg',
+  LDY: 'box-rf',
+  KGY: 'box-hv',
+  ALL: 'box-mt',
+};
+
+const REGION_TABS = [
+  {id:'all',  zh:'全部 All'},
+  {id:'china',zh:'🇨🇳 中国大陆'},
+  {id:'taiwan',zh:'🇹🇼 台湾'},
+  {id:'hk',   zh:'🇭🇰 香港'},
+  {id:'sea',  zh:'🌏 东南亚'},
+  {id:'redsea',zh:'🔴 红海'},
+  {id:'turkey',zh:'🇹🇷 土耳其'},
+  {id:'blacksea',zh:'🌊 黑海'},
+];
+
+function initRegionTabs() {
+  const container = document.getElementById('region-tabs');
+  container.innerHTML = '';
+  REGION_TABS.forEach(tab => {
+    const btn = document.createElement('button');
+    btn.className = 'region-tab' + (tab.id === activeRegion ? ' active' : '');
+    btn.textContent = tab.zh;
+    btn.onclick = () => {
+      activeRegion = tab.id;
+      currentPage = 1;
+      initRegionTabs();
+      renderTable();
+    };
+    container.appendChild(btn);
+  });
+}
+
 function getFilteredData() {
   const kw = document.getElementById('inp-kw').value.trim().toLowerCase();
-  const region = document.getElementById('sel-region').value;
   const feeType = document.getElementById('sel-type').value;
   const currency = document.getElementById('sel-currency').value;
+  const boxType = document.getElementById('sel-box-type').value;
   const tabRegion = activeRegion;
 
+  // Show/hide box type column and filter
+  const showBoxCol = feeType === 'thc';
+  document.getElementById('th-box-type').style.display = showBoxCol ? '' : 'none';
+  document.getElementById('box-type-filter-wrap').style.display = showBoxCol ? '' : 'none';
+  document.getElementById('box-legend').style.display = showBoxCol ? '' : 'none';
+
   return DATA.filter(d => {
-    // region tab
     if (tabRegion !== 'all' && d.region !== tabRegion) return false;
-    // region select
-    if (region !== 'all' && d.region !== region) return false;
-    // fee type
+
+    // Fee type
     if (feeType !== 'all') {
       const map = {port:'port_dues',pilotage:'pilotage',towage:'towage',mooring:'mooring',terminal:'thc',berth:'berth'};
       const keywords = {
@@ -521,134 +672,100 @@ function getFilteredData() {
       const feeStr = (d.fee_zh + d.fee_en).toLowerCase();
       if (!kws.some(k => feeStr.includes(k))) return false;
     }
-    // currency
+
+    // Box type filter (only when THC selected)
+    if (showBoxCol && boxType !== 'all') {
+      if (d.box_type !== boxType) return false;
+    }
+
+    // Currency
     if (currency !== 'all') {
       if (currency === 'local') {
-        if (['USD','EUR','CNY'].includes(d.currency)) return false;
+        if (['USD','EUR','CNY','HKD','SGD','NTD'].includes(d.currency)) return false;
       } else {
         if (!d.currency.includes(currency)) return false;
       }
     }
-    // keyword
+
+    // Keyword
     if (kw) {
-      const searchStr = [d.port_zh, d.port_en, d.country_zh, d.country_en, d.fee_zh, d.fee_en, d.note_zh, d.note_en].join(' ').toLowerCase();
+      const searchStr = [
+        d.port_zh, d.port_en, d.country_zh, d.country_en,
+        d.fee_zh, d.fee_en, d.note_zh, d.note_en,
+        d.box_type_zh || '', d.box_type_en || ''
+      ].join(' ').toLowerCase();
       if (!searchStr.includes(kw)) return false;
     }
     return true;
   });
 }
 
-function getPortCount(data) {
-  return new Set(data.map(d => d.port_zh)).size;
-}
-
 function renderTable() {
   const filtered = getFilteredData();
   const tbody = document.getElementById('tbody');
   const noRes = document.getElementById('no-results');
-  const tblCount = document.getElementById('tbl-count');
-  const statPorts = document.getElementById('stat-ports');
-  const statEntries = document.getElementById('stat-entries');
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  if (currentPage > totalPages) currentPage = totalPages || 1;
 
-  statPorts.textContent = getPortCount(filtered);
-  statEntries.textContent = filtered.length;
-  tblCount.textContent = currentLang === 'zh'
-    ? `共 ${filtered.length} 条记录`
-    : `${filtered.length} records found`;
+  const stats = document.getElementById('stats');
+  stats.innerHTML = `
+    <div class="stat-chip"><strong>${filtered.length}</strong> 条费率 / records</div>
+    <div class="stat-chip"><strong>${new Set(filtered.map(d=>d.port_zh)).size}</strong> 个港口 / ports</div>
+  `;
 
-  if (filtered.length === 0) {
-    tbody.innerHTML = '';
-    noRes.style.display = '';
-    document.getElementById('pagination').innerHTML = '';
-    return;
-  }
-  noRes.style.display = 'none';
+  noRes.style.display = filtered.length === 0 ? '' : 'none';
 
   const start = (currentPage - 1) * PAGE_SIZE;
-  const paged = filtered.slice(start, start + PAGE_SIZE);
+  const pageData = filtered.slice(start, start + PAGE_SIZE);
 
-  const regionBadgeMap = {
-    china: 'badge-china', taiwan: 'badge-taiwan', hk: 'badge-hk',
-    sea: 'badge-sea', redsea: 'badge-redsea', turkey: 'badge-turkey', blacksea: 'badge-blacksea'
-  };
-
-  tbody.innerHTML = paged.map(d => {
-    const portName = currentLang === 'zh' ? d.port_zh : d.port_en;
-    const portSub  = currentLang === 'zh' ? d.port_en : d.port_zh;
-    const country  = currentLang === 'zh' ? d.country_zh : d.country_en;
-    const fee      = currentLang === 'zh' ? d.fee_zh : d.fee_en;
-    const basis    = currentLang === 'zh' ? d.basis_zh : d.basis_en;
-    const note     = currentLang === 'zh' ? d.note_zh : d.note_en;
-    const badgeClass = regionBadgeMap[d.region] || '';
-    const srcLink = d.src_url
-      ? `<a href="${d.src_url}" target="_blank" class="link-btn">${d.source}</a>`
-      : `<span style="color:var(--muted);font-size:0.8rem;">${d.source}</span>`;
-    return `<tr>
-      <td><div class="port-name">${portName}</div><div class="port-name-en">${portSub}</div></td>
-      <td><span class="region-badge ${badgeClass}">${country}</span></td>
-      <td>${fee}</td>
-      <td style="color:var(--muted);font-size:0.85rem;">${basis}</td>
-      <td><span class="fee-val">${d.rate}</span></td>
-      <td><span style="font-weight:700;color:#444;">${d.currency}</span></td>
-      <td style="font-size:0.82rem;color:var(--muted);max-width:200px;">${note}</td>
-      <td>${srcLink}</td>
-    </tr>`;
+  tbody.innerHTML = pageData.map(d => {
+    const boxCss = d.box_type ? BOX_TYPE_CSS[d.box_type] || 'box-mt' : '';
+    const boxBadge = d.box_type
+      ? `<span class="box-type-badge ${boxCss}">${currentLang==='zh' ? d.box_type_zh : d.box_type_en}</span>`
+      : '';
+    const regionLabel = currentLang==='zh'
+      ? {china:'🇨🇳 中国大陆',taiwan:'🇹🇼 台湾',hk:'🇭🇰 香港',sea:'🌏 东南亚',redsea:'🔴 红海',turkey:'🇹🇷 土耳其',blacksea:'🌊 黑海'}[d.region] || d.region
+      : {china:'🇨🇳 China',taiwan:'🇹🇼 Taiwan',hk:'🇭🇰 HK',sea:'🌏 SE Asia',redsea:'🔴 Red Sea',turkey:'🇹🇷 Turkey',blacksea:'🌊 Black Sea'}[d.region] || d.region;
+    const sourceHtml = d.src_url
+      ? `<a class="source-link" href="${d.src_url}" target="_blank">${d.source}</a>`
+      : d.source;
+    return `
+      <tr>
+        <td>${regionLabel}</td>
+        <td><strong>${currentLang==='zh' ? d.port_zh : d.port_en}</strong></td>
+        <td>${currentLang==='zh' ? d.country_zh : d.country_en}</td>
+        <td style="display:${document.getElementById('th-box-type').style.display||'none'==='none'?'none':''}">${boxBadge}</td>
+        <td><span class="fee-badge">${currentLang==='zh' ? d.fee_zh : d.fee_en}</span></td>
+        <td class="rate-cell">${d.rate} <small>${d.currency}</small></td>
+        <td>${currentLang==='zh' ? d.basis_zh : d.basis_en}</td>
+        <td><div>${currentLang==='zh' ? d.note_zh : d.note_en}</div></td>
+        <td>${sourceHtml}</td>
+      </tr>
+    `;
   }).join('');
 
-  renderPagination(filtered.length);
-}
-
-function renderPagination(total) {
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  // Pagination
   const pg = document.getElementById('pagination');
-  if (totalPages <= 1) { pg.innerHTML = ''; return; }
-  let html = '';
-  const prev = currentLang === 'zh' ? '«' : '«';
-  const next = currentLang === 'zh' ? '»' : '»';
-  html += `<button class="page-btn" onclick="gotoPage(${currentPage-1})" ${currentPage===1?'disabled':''}>«</button>`;
-  for (let i = 1; i <= totalPages; i++) {
-    html += `<button class="page-btn${i===currentPage?' active':''}" onclick="gotoPage(${i})">${i}</button>`;
+  if (filtered.length === 0) { pg.innerHTML = ''; return; }
+  const tp = Math.ceil(filtered.length / PAGE_SIZE);
+  let pbtns = `<button class="page-btn" ${currentPage<=1?'disabled':''} onclick="currentPage--;renderTable()">‹ Prev</button>`;
+  for (let i=1; i<=tp; i++) {
+    if (tp > 7 && Math.abs(i-currentPage) > 2 && i !== 1 && i !== tp) {
+      if (i === 2 || i === tp-1) pbtns += '<span style="padding:6px;color:var(--muted)">…</span>';
+      continue;
+    }
+    pbtns += `<button class="page-btn ${i===currentPage?'active':''}" onclick="currentPage=${i};renderTable()">${i}</button>`;
   }
-  html += `<button class="page-btn" onclick="gotoPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>»</button>`;
-  pg.innerHTML = html;
+  pbtns += `<button class="page-btn" ${currentPage>=tp?'disabled':''} onclick="currentPage++;renderTable()">Next ›</button>`;
+  pg.innerHTML = `<div class="page-info">${start+1}–${Math.min(start+PAGE_SIZE,filtered.length)} / ${filtered.length}</div><div class="page-btns">${pbtns}</div>`;
 }
 
-function gotoPage(p) {
-  const filtered = getFilteredData();
-  const total = Math.ceil(filtered.length / PAGE_SIZE);
-  if (p < 1 || p > total) return;
-  currentPage = p;
-  renderTable();
-  document.querySelector('.table-wrapper').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function doSearch() {
-  currentPage = 1;
-  renderTable();
-}
-
-function resetSearch() {
-  document.getElementById('inp-kw').value = '';
-  document.getElementById('sel-region').value = 'all';
-  document.getElementById('sel-type').value = 'all';
-  document.getElementById('sel-currency').value = 'all';
-  activeRegion = 'all';
-  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-all').classList.add('active');
-  currentPage = 1;
-  renderTable();
-}
-
-function filterRegion(region) {
-  activeRegion = region;
-  document.getElementById('sel-region').value = region === 'all' ? 'all' : region;
-  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + region).classList.add('active');
-  currentPage = 1;
-  renderTable();
-}
+// Fee type change → reset page
+document.getElementById('sel-type').addEventListener('change', () => { currentPage=1; renderTable(); });
+document.getElementById('sel-currency').addEventListener('change', () => { currentPage=1; renderTable(); });
 
 // Init
+initRegionTabs();
 renderTable();
 </script>
 </body>
