@@ -115,6 +115,22 @@
   tbody tr:hover { background: #f0f5ff; }
   tbody td { padding: 11px 14px; font-size: 0.88rem; vertical-align: top; line-height: 1.5; }
   .rate-cell { font-weight: 700; color: var(--primary); font-size: 0.95rem; white-space: nowrap; }
+
+  /* ── Cross table (THC mode) ── */
+  .cross-th { padding: 8px 6px !important; text-align: center !important; vertical-align: middle; }
+  .cross-cell { text-align: center; vertical-align: middle; padding: 8px 6px !important; }
+  .cross-cell.no-rate { color: #ccc; }
+  .cross-cell .rate-value { display: block; font-weight: 700; font-size: 0.88rem; color: var(--primary); }
+  .cross-cell .rate-currency { display: block; font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+  .region-cell, .country-cell { white-space: nowrap; }
+  .port-cell strong { font-size: 0.92rem; }
+  .source-cell { white-space: nowrap; font-size: 0.8rem; }
+
+  /* ── Standard row table ── */
+  .region-th { min-width: 90px; }
+  .port-th { min-width: 120px; }
+  .country-th { min-width: 80px; }
+
   .fee-badge {
     display: inline-block; background: #e8f0fd; color: var(--primary-light);
     border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 600;
@@ -278,16 +294,16 @@
   <div class="table-wrap">
     <table>
       <thead>
-        <tr>
-          <th id="th-region">区域</th>
-          <th id="th-port">港口</th>
-          <th id="th-country">国家</th>
-          <th id="th-box-type" style="display:none;">箱型</th>
+        <tr id="thead-tr1">
+          <th class="region-th">区域</th>
+          <th class="port-th">港口</th>
+          <th class="country-th">国家</th>
+          <th id="th-box-type">箱型</th>
           <th id="th-fee">费用类型</th>
           <th id="th-rate">费率</th>
           <th id="th-basis">计费单位</th>
           <th id="th-note">备注</th>
-          <th id="th-source">来源</th>
+          <th>来源</th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
@@ -648,18 +664,15 @@ function getFilteredData() {
   const boxType = document.getElementById('sel-box-type').value;
   const tabRegion = activeRegion;
 
-  // Show/hide box type column and filter
-  const showBoxCol = feeType === 'thc';
-  document.getElementById('th-box-type').style.display = showBoxCol ? '' : 'none';
-  document.getElementById('box-type-filter-wrap').style.display = showBoxCol ? '' : 'none';
-  document.getElementById('box-legend').style.display = showBoxCol ? '' : 'none';
+  // Show/hide box type filter and legend
+  document.getElementById('box-type-filter-wrap').style.display = '';
+  document.getElementById('box-legend').style.display = '';
 
   return DATA.filter(d => {
     if (tabRegion !== 'all' && d.region !== tabRegion) return false;
 
     // Fee type
     if (feeType !== 'all') {
-      const map = {port:'port_dues',pilotage:'pilotage',towage:'towage',mooring:'mooring',terminal:'thc',berth:'berth'};
       const keywords = {
         port: ['port dues','港口费'],
         pilotage: ['pilotage','引航'],
@@ -673,8 +686,8 @@ function getFilteredData() {
       if (!kws.some(k => feeStr.includes(k))) return false;
     }
 
-    // Box type filter (only when THC selected)
-    if (showBoxCol && boxType !== 'all') {
+    // Box type filter (for non-THC rows)
+    if (boxType !== 'all') {
       if (d.box_type !== boxType) return false;
     }
 
@@ -700,12 +713,141 @@ function getFilteredData() {
   });
 }
 
+// Box type order for cross table
+const BOX_TYPE_ORDER = ['CNY','CQY','WPY','ZGY','LDY','KGY','ALL'];
+const BOX_TYPE_HEADERS_ZH = {
+  CNY:'20\'普柜',
+  CQY:'40\'普柜',
+  WPY:'40\'高柜',
+  ZGY:'危险品',
+  LDY:'冷冻箱',
+  KGY:'重柜',
+  ALL:'空柜'
+};
+const BOX_TYPE_HEADERS_EN = {
+  CNY:"20' GP",
+  CQY:"40' GP",
+  WPY:"40' HC",
+  ZGY:'DG',
+  LDY:'Reefer',
+  KGY:'Heavy',
+  ALL:'Empty'
+};
+
 function renderTable() {
+  const feeType = document.getElementById('sel-type').value;
   const filtered = getFilteredData();
   const tbody = document.getElementById('tbody');
   const noRes = document.getElementById('no-results');
+
+  // Show/hide box type column and filter for row view
+  const showBoxCol = feeType === 'thc';
+  document.getElementById('th-box-type').style.display = showBoxCol ? 'none' : '';
+  document.getElementById('box-type-filter-wrap').style.display = showBoxCol ? 'none' : '';
+  document.getElementById('box-legend').style.display = showBoxCol ? 'none' : '';
+
+  // ─── THC Cross-table Mode ───────────────────────────────
+  if (showBoxCol) {
+    // Pivot: group by port key
+    const portMap = {};
+    filtered.forEach(d => {
+      if (!d.box_type) return;
+      const key = d.region + '|' + d.port_zh;
+      if (!portMap[key]) {
+        portMap[key] = { region: d.region, port_zh: d.port_zh, port_en: d.port_en,
+          country_zh: d.country_zh, country_en: d.country_en,
+          source: d.source, src_url: d.src_url, rates: {} };
+      }
+      portMap[key].rates[d.box_type] = { rate: d.rate, currency: d.currency,
+        note_zh: d.note_zh, note_en: d.note_en };
+    });
+
+    const portRows = Object.values(portMap);
+    const crossPageSize = 20;
+    const tp = Math.ceil(portRows.length / crossPageSize);
+    if (currentPage > tp) currentPage = tp || 1;
+    const start = (currentPage - 1) * crossPageSize;
+    const pageRows = portRows.slice(start, start + crossPageSize);
+
+    // Update stats
+    const stats = document.getElementById('stats');
+    stats.innerHTML = `
+      <div class="stat-chip"><strong>${portRows.length}</strong> 个港口 THC / ports</div>
+      <div class="stat-chip"><strong>${portRows.reduce((a,k)=>a+Object.keys(k.rates).length,0)}</strong> 条费率 / records</div>
+    `;
+    noRes.style.display = portRows.length === 0 ? '' : 'none';
+
+    // Build cross-table header
+    const bh = currentLang === 'zh' ? BOX_TYPE_HEADERS_ZH : BOX_TYPE_HEADERS_EN;
+    const boxThCells = BOX_TYPE_ORDER.map(bt => {
+      const css = BOX_TYPE_CSS[bt] || 'box-mt';
+      return `<th class="cross-th box-col"><span class="box-type-badge ${css}">${bh[bt]}</span></th>`;
+    }).join('');
+
+    document.getElementById('thead-tr1').innerHTML = `
+      <th class="region-th">${currentLang==='zh'?'航区':'Region'}</th>
+      <th class="port-th">${currentLang==='zh'?'港口':'Port'}</th>
+      <th class="country-th">${currentLang==='zh'?'国家':'Country'}</th>
+      ${boxThCells}
+      <th>${currentLang==='zh'?'来源':'Source'}</th>
+    `;
+    // Hide standard columns, show cross columns
+    document.getElementById('th-fee').style.display = 'none';
+    document.getElementById('th-rate').style.display = 'none';
+    document.getElementById('th-basis').style.display = 'none';
+    document.getElementById('th-note').style.display = 'none';
+    BOX_TYPE_ORDER.forEach(bt => {
+      const el = document.getElementById('th-box-' + bt);
+      if (el) el.style.display = '';
+    });
+
+    const regionLabel = (r) => currentLang==='zh'
+      ? {china:'🇨🇳 中国大陆',taiwan:'🇹🇼 台湾',hk:'🇭🇰 香港',sea:'🌏 东南亚',redsea:'🔴 红海',turkey:'🇹🇷 土耳其',blacksea:'🌊 黑海'}[r] || r
+      : {china:'🇨🇳 China',taiwan:'🇹🇼 Taiwan',hk:'🇭🇰 HK',sea:'🌏 SE Asia',redsea:'🔴 Red Sea',turkey:'🇹🇷 Turkey',blacksea:'🌊 Black Sea'}[r] || r;
+
+    tbody.innerHTML = pageRows.map(row => {
+      const sourceHtml = row.src_url
+        ? `<a class="source-link" href="${row.src_url}" target="_blank">${row.source}</a>`
+        : row.source;
+      const boxCells = BOX_TYPE_ORDER.map(bt => {
+        const cell = row.rates[bt];
+        if (!cell) return `<td class="cross-cell no-rate">—</td>`;
+        const css = BOX_TYPE_CSS[bt] || 'box-mt';
+        return `<td class="cross-cell">
+          <span class="rate-value">${cell.rate}</span>
+          <span class="rate-currency">${cell.currency}</span>
+        </td>`;
+      }).join('');
+      return `<tr>
+        <td class="region-cell">${regionLabel(row.region)}</td>
+        <td class="port-cell"><strong>${currentLang==='zh'?row.port_zh:row.port_en}</strong></td>
+        <td class="country-cell">${currentLang==='zh'?row.country_zh:row.country_en}</td>
+        ${boxCells}
+        <td class="source-cell">${sourceHtml}</td>
+      </tr>`;
+    }).join('');
+
+    // Pagination for cross table
+    const pg = document.getElementById('pagination');
+    if (portRows.length === 0) { pg.innerHTML = ''; return; }
+    let pbtns = `<button class="page-btn" ${currentPage<=1?'disabled':''} onclick="currentPage--;renderTable()">‹ Prev</button>`;
+    for (let i=1; i<=tp; i++) {
+      if (tp > 7 && Math.abs(i-currentPage)>2 && i!==1 && i!==tp) {
+        if (i===2||i===tp-1) pbtns+='<span style="padding:6px;color:var(--muted)">…</span>';
+        continue;
+      }
+      pbtns+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="currentPage=${i};renderTable()">${i}</button>`;
+    }
+    pbtns+=`<button class="page-btn" ${currentPage>=tp?'disabled':''} onclick="currentPage++;renderTable()">Next ›</button>`;
+    pg.innerHTML = `<div class="page-info">${start+1}–${Math.min(start+crossPageSize,portRows.length)} / ${portRows.length} ${currentLang==='zh'?'个港口':'ports'}</div><div class="page-btns">${pbtns}</div>`;
+    return;
+  }
+
+  // ─── Normal Row Mode ─────────────────────────────────────
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   if (currentPage > totalPages) currentPage = totalPages || 1;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageData = filtered.slice(start, start + PAGE_SIZE);
 
   const stats = document.getElementById('stats');
   stats.innerHTML = `
@@ -715,8 +857,26 @@ function renderTable() {
 
   noRes.style.display = filtered.length === 0 ? '' : 'none';
 
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const pageData = filtered.slice(start, start + PAGE_SIZE);
+  // Restore standard header
+  document.getElementById('th-fee').style.display = '';
+  document.getElementById('th-rate').style.display = '';
+  document.getElementById('th-basis').style.display = '';
+  document.getElementById('th-note').style.display = '';
+  BOX_TYPE_ORDER.forEach(bt => {
+    const el = document.getElementById('th-box-' + bt);
+    if (el) el.style.display = 'none';
+  });
+  document.getElementById('thead-tr1').innerHTML = `
+    <th class="region-th">${currentLang==='zh'?'航区':'Region'}</th>
+    <th class="port-th">${currentLang==='zh'?'港口':'Port'}</th>
+    <th class="country-th">${currentLang==='zh'?'国家':'Country'}</th>
+    <th id="th-box-type">${currentLang==='zh'?'箱型':'Box Type'}</th>
+    <th id="th-fee">${currentLang==='zh'?'费用类型':'Fee Type'}</th>
+    <th id="th-rate">${currentLang==='zh'?'费率':'Rate'}</th>
+    <th id="th-basis">${currentLang==='zh'?'计费单位':'Unit'}</th>
+    <th id="th-note">${currentLang==='zh'?'备注':'Note'}</th>
+    <th>${currentLang==='zh'?'来源':'Source'}</th>
+  `;
 
   tbody.innerHTML = pageData.map(d => {
     const boxCss = d.box_type ? BOX_TYPE_CSS[d.box_type] || 'box-mt' : '';
@@ -734,7 +894,7 @@ function renderTable() {
         <td>${regionLabel}</td>
         <td><strong>${currentLang==='zh' ? d.port_zh : d.port_en}</strong></td>
         <td>${currentLang==='zh' ? d.country_zh : d.country_en}</td>
-        <td style="display:${document.getElementById('th-box-type').style.display||'none'==='none'?'none':''}">${boxBadge}</td>
+        <td>${boxBadge}</td>
         <td><span class="fee-badge">${currentLang==='zh' ? d.fee_zh : d.fee_en}</span></td>
         <td class="rate-cell">${d.rate} <small>${d.currency}</small></td>
         <td>${currentLang==='zh' ? d.basis_zh : d.basis_en}</td>
@@ -747,16 +907,16 @@ function renderTable() {
   // Pagination
   const pg = document.getElementById('pagination');
   if (filtered.length === 0) { pg.innerHTML = ''; return; }
-  const tp = Math.ceil(filtered.length / PAGE_SIZE);
+  const tp2 = Math.ceil(filtered.length / PAGE_SIZE);
   let pbtns = `<button class="page-btn" ${currentPage<=1?'disabled':''} onclick="currentPage--;renderTable()">‹ Prev</button>`;
-  for (let i=1; i<=tp; i++) {
-    if (tp > 7 && Math.abs(i-currentPage) > 2 && i !== 1 && i !== tp) {
-      if (i === 2 || i === tp-1) pbtns += '<span style="padding:6px;color:var(--muted)">…</span>';
+  for (let i=1; i<=tp2; i++) {
+    if (tp2 > 7 && Math.abs(i-currentPage) > 2 && i !== 1 && i !== tp2) {
+      if (i === 2 || i === tp2-1) pbtns += '<span style="padding:6px;color:var(--muted)">…</span>';
       continue;
     }
     pbtns += `<button class="page-btn ${i===currentPage?'active':''}" onclick="currentPage=${i};renderTable()">${i}</button>`;
   }
-  pbtns += `<button class="page-btn" ${currentPage>=tp?'disabled':''} onclick="currentPage++;renderTable()">Next ›</button>`;
+  pbtns += `<button class="page-btn" ${currentPage>=tp2?'disabled':''} onclick="currentPage++;renderTable()">Next ›</button>`;
   pg.innerHTML = `<div class="page-info">${start+1}–${Math.min(start+PAGE_SIZE,filtered.length)} / ${filtered.length}</div><div class="page-btns">${pbtns}</div>`;
 }
 
