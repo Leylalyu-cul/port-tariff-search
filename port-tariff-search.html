@@ -1,1107 +1,2689 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sohar Port Tariff Search | 苏哈尔港费率查询</title>
-  <style>
-    :root {
-      --sipc: #e67e22;
-      --oict: #2980b9;
-      --storage: #27ae60;
-      --local: #16a085;
-      --dg: #c0392b;
-      --bg: #f5f7fa;
-      --card-bg: #ffffff;
-      --text: #2c3e50;
-      --border: #e1e8ed;
-      --header-bg: #1a252f;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港口公共费率查询 | Port Public Tariff Search</title>
+<style>
+  :root {
+    --primary: #0a2d6b;
+    --primary-light: #1a4fa0;
+    --accent: #e8a000;
+    --accent2: #0091d5;
+    --bg: #f0f4f8;
+    --card: #fff;
+    --border: #d0dce8;
+    --text: #1a2233;
+    --muted: #6b7a91;
+    --green: #0a8a5a;
+    --red: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ===== HEADER ===== */
+  header {
+    background: linear-gradient(135deg, #0a2d6b 0%, #0d3d8f 60%, #0091d5 100%);
+    color: #fff;
+    padding: 0;
+    box-shadow: 0 3px 12px rgba(10,45,107,0.25);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { font-size: 2rem; }
+  .logo-text h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.02em; }
+  .logo-text p { font-size: 0.78rem; opacity: 0.8; margin-top: 1px; }
+  .lang-switcher { display: flex; gap: 6px; }
+  .lang-btn {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.35);
+    color: #fff; border-radius: 20px; padding: 5px 16px; cursor: pointer;
+    font-size: 0.82rem; transition: all 0.2s;
+  }
+  .lang-btn.active, .lang-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    body {
-      font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(180deg, #0a2d6b 0%, #1357b8 100%);
+    color: #fff; text-align: center; padding: 42px 20px 36px;
+  }
+  .hero h2 { font-size: 1.9rem; font-weight: 800; letter-spacing: 0.01em; }
+  .hero p { margin-top: 8px; font-size: 0.95rem; opacity: 0.85; }
+  .hero .regions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; }
+  .region-tag {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px; padding: 4px 14px; font-size: 0.8rem; opacity: 0.9;
+  }
 
-    /* Header */
-    .header {
-      background: var(--header-bg);
-      color: #fff;
-      padding: 28px 20px 24px;
-      text-align: center;
-    }
-    .header h1 {
-      font-size: 26px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .header .subtitle {
-      font-size: 13px;
-      color: #aab7c4;
-    }
-    .header .badge-row {
-      margin-top: 12px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      padding: 3px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    .badge-sipc { background: var(--sipc); color: #fff; }
-    .badge-oict { background: var(--oict); color: #fff; }
-    .badge-storage { background: var(--storage); color: #fff; }
-    .badge-local { background: var(--local); color: #fff; }
+  /* ===== MAIN ===== */
+  .main { max-width: 1400px; margin: 0 auto; padding: 28px 20px 60px; }
 
-    /* Search */
-    .search-section {
-      max-width: 860px;
-      margin: -18px auto 28px;
-      padding: 0 16px;
-    }
-    .search-box {
-      display: flex;
-      gap: 8px;
-      background: #fff;
-      border-radius: 12px;
-      padding: 6px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-    }
-    .search-box input {
-      flex: 1;
-      padding: 14px 18px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-box input:focus { border-color: var(--oict); }
-    .search-box button {
-      padding: 14px 24px;
-      background: var(--oict);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .search-box button:hover { background: #1a5f8a; }
+  /* ===== SEARCH BAR ===== */
+  .search-bar {
+    background: var(--card); border-radius: 14px; padding: 22px 26px;
+    box-shadow: 0 2px 16px rgba(10,45,107,0.08); margin-bottom: 22px;
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
+  }
+  .search-field { flex: 1; min-width: 220px; }
+  .search-field label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .search-field input, .search-field select {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 9px 12px; font-size: 0.92rem; color: var(--text);
+    background: #fafbfc; transition: border-color 0.2s;
+    outline: none;
+  }
+  .search-field input:focus, .search-field select:focus { border-color: var(--primary-light); background: #fff; }
 
-    /* Nav tabs */
-    .nav-tabs {
-      max-width: 860px;
-      margin: 0 auto 20px;
-      padding: 0 16px;
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
-    .tab-btn {
-      padding: 9px 16px;
-      border: 2px solid var(--border);
-      border-radius: 8px 8px 0 0;
-      background: #e8ecf0;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      transition: all 0.15s;
-    }
-    .tab-btn:hover { background: #d5dce3; }
-    .tab-btn.active {
-      background: #fff;
-      border-bottom-color: #fff;
-      color: var(--oict);
-    }
-    .tab-btn.sipc.active { color: var(--sipc); }
-    .tab-btn.oict.active { color: var(--oict); }
-    .tab-btn.storage.active { color: var(--storage); }
-    .tab-btn.local.active { color: var(--local); }
+  /* ===== REGION TABS ===== */
+  .region-tabs {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
+  }
+  .region-tab {
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 7px 16px; cursor: pointer; font-size: 0.85rem; color: var(--text);
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .region-tab:hover { border-color: var(--primary-light); color: var(--primary-light); }
+  .region-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 
-    /* Container */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 16px 60px;
-    }
+  /* ===== STATS ===== */
+  .stats {
+    display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: var(--card); border-radius: 8px; padding: 8px 16px;
+    font-size: 0.82rem; box-shadow: 0 1px 4px rgba(10,45,107,0.06);
+  }
+  .stat-chip strong { color: var(--primary); font-size: 1.1rem; }
 
-    /* Section */
-    .section {
-      display: none;
-    }
-    .section.active { display: block; }
+  /* ===== TABLE ===== */
+  .table-wrap {
+    background: var(--card); border-radius: 14px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(10,45,107,0.08);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    background: var(--primary); color: #fff; padding: 12px 14px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-align: left;
+    white-space: nowrap; position: sticky; top: 0;
+  }
+  tbody tr { border-bottom: 1px solid #e8edf3; transition: background 0.15s; }
+  tbody tr:hover { background: #f0f5ff; }
+  tbody td { padding: 11px 14px; font-size: 0.88rem; vertical-align: top; line-height: 1.5; }
+  .rate-cell { font-weight: 700; color: var(--primary); font-size: 0.95rem; white-space: nowrap; }
 
-    .section-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 24px 28px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-      border: 1px solid var(--border);
-    }
-    .section-card h2 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .section-card.sipc h2 { color: var(--sipc); border-color: var(--sipc); }
-    .section-card.oict h2 { color: var(--oict); border-color: var(--oict); }
-    .section-card.storage h2 { color: var(--storage); border-color: var(--storage); }
-    .section-card.local h2 { color: var(--local); border-color: var(--local); }
+  /* ── Export button ── */
+  .export-btn {
+    background: var(--primary); border: none; border-radius: 8px;
+    color: #fff; padding: 9px 18px; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; white-space: nowrap; transition: background 0.2s;
+  }
+  .export-btn:hover { background: var(--primary-light); }
+  .export-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .region-th { min-width: 90px; }
+  .port-th { min-width: 120px; }
+  .country-th { min-width: 80px; }
 
-    /* Tables */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      margin-bottom: 12px;
-    }
-    th {
-      background: #f0f3f6;
-      padding: 9px 12px;
-      text-align: left;
-      font-weight: 700;
-      color: #555;
-      border-bottom: 2px solid var(--border);
-      white-space: nowrap;
-    }
-    td {
-      padding: 9px 12px;
-      border-bottom: 1px solid #f0f4f7;
-      vertical-align: middle;
-    }
-    tr:hover td { background: #f8fafc; }
-    tr:last-child td { border-bottom: none; }
+  .fee-badge {
+    display: inline-block; background: #e8f0fd; color: var(--primary-light);
+    border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 600;
+  }
+  .source-link { color: var(--accent2); text-decoration: none; font-size: 0.82rem; }
+  .source-link:hover { text-decoration: underline; }
+  .note-text { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
 
-    .col-rate { text-align: right; font-variant-numeric: tabular-nums; }
-    .col-note { color: #7f8c8d; font-size: 12px; }
+  .pricing-badge { display: inline-block; border-radius: 4px; padding: 2px 7px; font-size: 0.73rem; font-weight: 700; white-space: nowrap; }
+  .badge-gov { background: #e8f5e9; color: #2e7d32; }
+  .badge-market { background: #fff3e0; color: #e65100; }
+  .market-note { display: inline-block; background: #fff8e1; color: #e65100; border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 600; border: 1px solid #ffb74d; }
 
-    /* Highlight rows */
-    .row-highlight td { background: #fffbea; }
-    .row-dg td { background: #fff5f5; }
+  /* ===== PAGINATION ===== */
+  .pagination { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; flex-wrap: wrap; gap: 10px; }
+  .page-info { font-size: 0.82rem; color: var(--muted); }
+  .page-btns { display: flex; gap: 6px; }
+  .page-btn {
+    background: #eef2f7; border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 12px; cursor: pointer; font-size: 0.82rem; color: var(--text);
+    transition: all 0.2s;
+  }
+  .page-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .page-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* Summary cards */
-    .rate-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-    .rate-card {
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 14px 16px;
-      border-left: 4px solid var(--oict);
-    }
-    .rate-card.sipc { border-color: var(--sipc); }
-    .rate-card.storage { border-color: var(--storage); }
-    .rate-card .label {
-      font-size: 11px;
-      color: #7f8c8d;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-    .rate-card .value {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .rate-card .sub {
-      font-size: 11px;
-      color: #95a5a6;
-      margin-top: 2px;
-    }
+  /* ===== LEGEND (预留，可扩展) ===== */
 
-    /* Info box */
-    .info-box {
-      background: #f8f9fa;
-      border-left: 4px solid #3498db;
-      border-radius: 0 6px 6px 0;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      font-size: 13px;
-    }
+  /* ===== DISCLAIMER ===== */
+  .disclaimer {
+    margin-top: 20px; padding: 14px 18px; background: #fff8e1; border-radius: 8px;
+    border-left: 4px solid var(--accent); font-size: 0.8rem; color: #5d4037; line-height: 1.6;
+  }
 
-    /* Notes */
-    .note-row td {
-      font-size: 11px;
-      color: #7f8c8d;
-      font-style: italic;
-      padding: 6px 12px;
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      .header h1 { font-size: 20px; }
-      table { font-size: 12px; }
-      th, td { padding: 7px 8px; }
-      .section-card { padding: 16px; }
-    }
-
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 24px 16px;
-      color: #95a5a6;
-      font-size: 12px;
-      border-top: 1px solid var(--border);
-      margin-top: 20px;
-    }
-
-    /* Search result highlight */
-    mark {
-      background: #fff3cd;
-      color: #856404;
-      border-radius: 3px;
-      padding: 0 2px;
-    }
-  </style>
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .search-field { min-width: 160px; }
+    thead th, tbody td { padding: 8px 8px; font-size: 0.8rem; }
+    .header-inner { padding: 12px 16px; }
+    .hero { padding: 28px 16px 24px; }
+  }
+</style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header">
-  <h1>🛳️ Sohar Port Tariff Search</h1>
-  <div class="subtitle">苏哈尔港（Sohar Port & Freezone）费率查询 · 阿曼苏丹国 · 2025-2026</div>
-  <div class="badge-row">
-    <span class="badge badge-sipc">SIPC · 港口费</span>
-    <span class="badge badge-oict">OICT THC · 码头操作费</span>
-    <span class="badge badge-storage">Storage · 堆存费</span>
-    <span class="badge badge-local">Local · 本地费</span>
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⚓</span>
+      <div class="logo-text">
+        <h1 id="logo-title">全球港口公共费率查询</h1>
+        <p>Port Public Tariff Search</p>
+      </div>
+    </div>
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <h2>全球港口公共费率速查</h2>
+  <p id="hero-sub">覆盖中国大陆 · 台湾 · 香港 · 东南亚 · 红海 · 土耳其 · 黑海</p>
+  <div class="regions">
+    <span class="region-tag">🇨🇳 中国大陆</span>
+    <span class="region-tag">🇹🇼 台湾</span>
+    <span class="region-tag">🇭🇰 香港</span>
+    <span class="region-tag">🌏 东南亚</span>
+    <span class="region-tag">🔴 红海</span>
+    <span class="region-tag">🇴🇲 阿曼</span>
+    <span class="region-tag">🇹🇷 土耳其</span>
+    <span class="region-tag">🌊 黑海</span>
   </div>
 </div>
 
-<!-- Search -->
-<div class="search-section">
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="搜索费率项目，如：THC、OOG、危险品、堆存、Storage…">
-    <button onclick="doSearch()">🔍 搜索</button>
+<div class="main">
+
+  <!-- Search -->
+  <div class="search-bar">
+    <div class="search-field" style="flex:2;min-width:260px;">
+      <label id="lbl-kw">关键词 / Keyword</label>
+      <input id="inp-kw" type="text" placeholder="港口名称、国家、费用类型..." oninput="renderTable()">
+    </div>
+    <div class="search-field">
+      <label id="lbl-type">费用类型 / Fee Type</label>
+      <select id="sel-type" onchange="renderTable()">
+        <option value="all">全部 All</option>
+        <option value="port">港口费 Port Dues</option>
+        <option value="pilotage">引航费 Pilotage</option>
+        <option value="towage">拖轮费 Towage</option>
+        <option value="mooring">系泊费 Mooring</option>
+        <option value="thc">码头操作费 THC</option>
+        <option value="berth">泊位费 Berth Dues</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label id="lbl-currency">货币 / Currency</label>
+      <select id="sel-currency" onchange="renderTable()">
+        <option value="all">全部 All</option>
+        <option value="CNY">CNY 人民币</option>
+        <option value="USD">USD 美元</option>
+        <option value="EUR">EUR 欧元</option>
+        <option value="HKD">HKD 港币</option>
+        <option value="SGD">SGD 新币</option>
+        <option value="NTD">NTD 台币</option>
+        <option value="local">本地货币 Other</option>
+      </select>
+    </div>
+    <div class="search-field" style="flex:0;align-self:flex-end;">
+      <button class="export-btn" id="btn-export" onclick="exportCSV()">📥 导出 CSV</button>
+    </div>
+
   </div>
-</div>
 
-<!-- Nav tabs -->
-<div class="nav-tabs">
-  <button class="tab-btn oict active" onclick="switchTab('thc')">OICT THC</button>
-  <button class="tab-btn storage" onclick="switchTab('storage')">堆存费</button>
-  <button class="tab-btn oict" onclick="switchTab('services')">其他服务</button>
-  <button class="tab-btn local" onclick="switchTab('local')">本地费</button>
-  <button class="tab-btn sipc" onclick="switchTab('sipc')">SIPC港口费</button>
-  <button class="tab-btn" onclick="switchTab('summary')">📊 综合对比</button>
-</div>
+  <!-- Region Tabs -->
+  <div class="region-tabs" id="region-tabs"></div>
 
-<div class="container">
+  <!-- Stats -->
+  <div class="stats" id="stats"></div>
 
-  <!-- ====== SUMMARY ====== -->
-  <div class="section active" id="sec-summary">
 
-    <div class="section-card oict">
-      <h2>📊 综合费率一览</h2>
-      <div class="rate-cards">
-        <div class="rate-card">
-          <div class="label">进口 THC · 20GP</div>
-          <div class="value">$112.03</div>
-          <div class="sub">OMR 43.09</div>
-        </div>
-        <div class="rate-card">
-          <div class="label">进口 THC · 40GP/HQ</div>
-          <div class="value">$154.04</div>
-          <div class="sub">OMR 59.25</div>
-        </div>
-        <div class="rate-card">
-          <div class="label">出口 THC · 20GP</div>
-          <div class="value">$140.03</div>
-          <div class="sub">OMR 53.86 · 比进口贵25%</div>
-        </div>
-        <div class="rate-card">
-          <div class="label">出口 THC · 40GP/HQ</div>
-          <div class="value">$196.05</div>
-          <div class="sub">OMR 75.40</div>
-        </div>
-        <div class="rate-card">
-          <div class="label">空箱进/出口 · 20GP</div>
-          <div class="value">$58.82</div>
-          <div class="sub">OMR 22.62 · 约为重箱的52%</div>
-        </div>
-        <div class="rate-card">
-          <div class="label">危险品 DG 附加</div>
-          <div class="value">+50% THC</div>
-          <div class="sub">IMDG Class 2-6, 8-9</div>
-        </div>
-        <div class="rate-card">
-          <div class="label">转运 THC · 20GP</div>
-          <div class="value">$130.00</div>
-          <div class="sub">含两程操作（卸+装）</div>
-        </div>
-        <div class="rate-card">
-          <div class="label">夜间/周末附加</div>
-          <div class="value">$106.60</div>
-          <div class="sub">OMR 41.00 / gang/hr · 最低4小时</div>
-        </div>
-        <div class="rate-card storage">
-          <div class="label">重箱免费堆存</div>
-          <div class="value">7天</div>
-          <div class="sub">超期 $4.20/天起递增</div>
-        </div>
-        <div class="rate-card storage">
-          <div class="label">冷藏箱免费堆存</div>
-          <div class="value">5天</div>
-          <div class="sub">含Plug-in $10.77 + Monitoring $6/天</div>
-        </div>
-        <div class="rate-card storage">
-          <div class="label">危险品箱免费堆存</div>
-          <div class="value">4天</div>
-          <div class="sub">费率最高（$16.78/天起）</div>
-        </div>
-        <div class="rate-card storage">
-          <div class="label">超限箱 OOG 免费堆存</div>
-          <div class="value">3天</div>
-          <div class="sub">费率 $23.80/天起</div>
-        </div>
-      </div>
-      <div class="info-box">
-        <strong>💡 说明：</strong>以上为美元报价（USD）。OMR（阿曼里亚尔）参考汇率 1 OMR ≈ 2.597 USD。
-        SIPC 港口费（GRT单价、引航、拖轮等）需按船型及停留时长单独计算，详见「SIPC港口费」标签。
-      </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr id="thead-tr1">
+          <th class="region-th">区域</th>
+          <th class="port-th">港口</th>
+          <th class="country-th">国家</th>
+          <th id="th-fee">费用类型</th>
+          <th id="th-rate">费率</th>
+          <th id="th-basis">计费单位</th>
+          <th id="th-note">备注</th>
+          <th id="th-pricing">定价性质</th>
+          <th>来源</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div id="no-results" style="display:none;text-align:center;padding:40px;color:var(--muted);">
+      未找到匹配结果 / No matching results
     </div>
   </div>
 
-  <!-- ====== OICT THC ====== -->
-  <div class="section" id="sec-thc">
-    <div class="section-card oict">
-      <h2>OICT THC · Terminal Handling Charges</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>项目</th>
-            <th>说明</th>
-            <th class="col-rate">20GP (USD)</th>
-            <th class="col-rate">40GP/HQ (USD)</th>
-            <th class="col-rate">20GP (OMR)</th>
-            <th class="col-rate">40GP/HQ (OMR)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="row-highlight">
-            <td>进口 Laden Import</td>
-            <td class="col-note">OICT Schedule A</td>
-            <td class="col-rate">112.03</td>
-            <td class="col-rate">154.04</td>
-            <td class="col-rate">43.09</td>
-            <td class="col-rate">59.25</td>
-          </tr>
-          <tr class="row-highlight">
-            <td>出口 Laden Export</td>
-            <td class="col-note">比进口贵约25%</td>
-            <td class="col-rate">140.03</td>
-            <td class="col-rate">196.05</td>
-            <td class="col-rate">53.86</td>
-            <td class="col-rate">75.40</td>
-          </tr>
-          <tr>
-            <td>空箱 Import/Export</td>
-            <td class="col-note">Empty Container</td>
-            <td class="col-rate">58.82</td>
-            <td class="col-rate">78.40</td>
-            <td class="col-rate">22.62</td>
-            <td class="col-rate">30.16</td>
-          </tr>
-          <tr>
-            <td>转运 Laden Transshipment</td>
-            <td class="col-note">含两程操作（卸+装），第二程船提前6h申报</td>
-            <td class="col-rate">130.00</td>
-            <td class="col-rate">182.00</td>
-            <td class="col-rate">50.00</td>
-            <td class="col-rate">70.00</td>
-          </tr>
-          <tr>
-            <td>转运 Empty Transshipment</td>
-            <td class="col-note">含两程操作</td>
-            <td class="col-rate">65.00</td>
-            <td class="col-rate">91.00</td>
-            <td class="col-rate">25.00</td>
-            <td class="col-rate">35.00</td>
-          </tr>
-          <tr class="row-dg">
-            <td>危险品 DG 附加</td>
-            <td class="col-note">IMDG Class 2-6, 8-9 · 加收标准THC的50%</td>
-            <td class="col-rate">+50%</td>
-            <td class="col-rate">+50%</td>
-            <td class="col-rate">+50%</td>
-            <td class="col-rate">+50%</td>
-          </tr>
-          <tr>
-            <td>门开干箱附加</td>
-            <td class="col-note">One Door Open · 加收标准THC的50%</td>
-            <td class="col-rate">+50%</td>
-            <td class="col-rate">+50%</td>
-            <td class="col-rate">+50%</td>
-            <td class="col-rate">+50%</td>
-          </tr>
-          <tr>
-            <td>舱盖板 Hatch Cover</td>
-            <td class="col-note">Per move</td>
-            <td class="col-rate">31.20</td>
-            <td class="col-rate">31.20</td>
-            <td class="col-rate">12.00</td>
-            <td class="col-rate">12.00</td>
-          </tr>
-          <tr>
-            <td>翻箱 Restow V→V（同贝）</td>
-            <td class="col-note">Vessel–Vessel same bay</td>
-            <td class="col-rate">34.99</td>
-            <td class="col-rate">52.49</td>
-            <td class="col-rate">13.46</td>
-            <td class="col-rate">20.19</td>
-          </tr>
-          <tr>
-            <td>翻箱 Restow V→D→V</td>
-            <td class="col-note">Vessel–Dock–Vessel</td>
-            <td class="col-rate">70.01</td>
-            <td class="col-rate">105.03</td>
-            <td class="col-rate">26.93</td>
-            <td class="col-rate">40.40</td>
-          </tr>
-          <tr>
-            <td>退关 Shut-out</td>
-            <td class="col-note">未装船退关费（空/重柜均适用）</td>
-            <td class="col-rate">56.03</td>
-            <td class="col-rate">84.00</td>
-            <td class="col-rate">21.55</td>
-            <td class="col-rate">32.31</td>
-          </tr>
-          <tr>
-            <td>箱体验箱 Container Inspection</td>
-            <td class="col-note">Per container</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">10.77</td>
-            <td class="col-rate">10.77</td>
-          </tr>
-          <tr>
-            <td>安保附加 Enhanced Security</td>
-            <td class="col-note">Per container</td>
-            <td class="col-rate">16.78</td>
-            <td class="col-rate">16.78</td>
-            <td class="col-rate">6.46</td>
-            <td class="col-rate">6.46</td>
-          </tr>
-          <tr>
-            <td>放箱超时 Port Releasing</td>
-            <td class="col-note">空箱15天内未归还</td>
-            <td class="col-rate">98.01</td>
-            <td class="col-rate">154.04</td>
-            <td class="col-rate">37.70</td>
-            <td class="col-rate">59.25</td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="note-row" style="padding:6px 12px 0;font-size:11px;color:#7f8c8d;font-style:italic;">注：45尺箱按40尺箱×1.125计费</p>
-    </div>
+  <!-- Pagination -->
+  <div class="pagination" id="pagination"></div>
 
-    <div class="section-card oict">
-      <h2>夜间 / 周末 / 节假日附加</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>项目</th>
-            <th>时段</th>
-            <th class="col-rate">OMR / gang/hr</th>
-            <th class="col-rate">USD / gang/hr</th>
-            <th>备注</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>夜间 Night Premium</td>
-            <td>2300 hrs — 0700 hrs</td>
-            <td class="col-rate">41.00</td>
-            <td class="col-rate">106.60</td>
-            <td class="col-note">最低4小时起算</td>
-          </tr>
-          <tr>
-            <td>周末 Weekend</td>
-            <td>周六00:00 — 周日23:59</td>
-            <td class="col-rate">41.00</td>
-            <td class="col-rate">106.60</td>
-            <td class="col-note">最低4小时起算</td>
-          </tr>
-          <tr>
-            <td>阿曼公共假日 Public Holiday</td>
-            <td>节假日全天 00:00 — 23:59</td>
-            <td class="col-rate">41.00</td>
-            <td class="col-rate">106.60</td>
-            <td class="col-note">最低4小时起算</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-card oict">
-      <h2>船舶延误费</h2>
-      <table>
-        <thead>
-          <tr><th>项目</th><th>说明</th><th class="col-rate">OMR</th><th class="col-rate">USD</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>桥吊延误 Crane Delay</td>
-            <td class="col-note">ETA延误超1h / 取消或推迟 / 船员开舱延误</td>
-            <td class="col-rate">63.00 / hr</td>
-            <td class="col-rate">163.80 / hr</td>
-          </tr>
-          <tr>
-            <td>开航延误 Unberth Delay</td>
-            <td class="col-note">作业完成后1h内无法离泊（引航延误除外）</td>
-            <td class="col-rate">1.02 / m LOA / hr</td>
-            <td class="col-rate">2.64 / m LOA / hr</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- Disclaimer -->
+  <div class="disclaimer" id="disclaimer">
+    ⚠️ <strong>数据说明：</strong><br>
+    <span style="background:#e8f5e9;color:#2e7d32;padding:1px 5px;border-radius:3px;font-weight:700">政府定价/指导价</span> — 依据交通运输部及各港务局官方文件；<br>
+    <span style="background:#fff3e0;color:#e65100;padding:1px 5px;border-radius:3px;font-weight:700">市场调节价</span> — 如码头操作费(THC)，由各码头运营商自主定价，橙色标注为提示，非实际费率，请直接询当地码头确认。<br>
+    实际费率以各港口官方公告为准。建议在订舱前与目的港代理确认最新费率。
   </div>
 
-  <!-- ====== STORAGE ====== -->
-  <div class="section" id="sec-storage">
-    <div class="section-card storage">
-      <h2>堆存费 Storage Charges</h2>
-      <div class="info-box">
-        计费规则：按日历日（0000–2359hrs）；从进闸或卸船日开始计算；Day 1 = 免费期结束次日
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>箱型</th>
-            <th>免费期</th>
-            <th>Day 1-7</th>
-            <th>Day 8-14</th>
-            <th>Day 15-21</th>
-            <th>Day 22+</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>重箱 Laden (General Purpose)</td>
-            <td><strong>7天</strong></td>
-            <td class="col-rate">$4.20</td>
-            <td class="col-rate">$5.59</td>
-            <td class="col-rate">$8.42</td>
-            <td class="col-rate">$11.19</td>
-          </tr>
-          <tr>
-            <td>冷藏箱 Reefer</td>
-            <td><strong>5天</strong></td>
-            <td class="col-rate">$4.20</td>
-            <td class="col-rate">$5.59</td>
-            <td class="col-rate">$8.42</td>
-            <td class="col-rate">$11.19</td>
-          </tr>
-          <tr class="row-dg">
-            <td>危险品箱 DG</td>
-            <td><strong>4天</strong></td>
-            <td class="col-rate">$16.78</td>
-            <td class="col-rate">$30.82</td>
-            <td class="col-rate">$44.81</td>
-            <td class="col-rate">$47.61</td>
-          </tr>
-          <tr>
-            <td>超限箱 OOG</td>
-            <td><strong>3天</strong></td>
-            <td class="col-rate">$23.80</td>
-            <td class="col-rate">$32.20</td>
-            <td class="col-rate">$44.81</td>
-            <td class="col-rate">$47.61</td>
-          </tr>
-          <tr>
-            <td>空箱 Empty</td>
-            <td><strong>7天</strong></td>
-            <td class="col-rate">$2.24</td>
-            <td class="col-rate">$3.38</td>
-            <td class="col-rate">$4.46 (Day 15+)</td>
-            <td class="col-rate">—</td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="note-row">注：所有价格为每20ft柜/每天；40ft加倍。进口重箱向收货人计费；超90天长滞箱向船公司计费。DG IMCO 1/4.2/5/7（活性炭等）不允许在码头存放。</p>
-    </div>
-
-    <div class="section-card storage">
-      <h2>冷藏箱附加费 Reefer Charges</h2>
-      <table>
-        <thead>
-          <tr><th>项目</th><th>说明</th><th class="col-rate">OMR</th><th class="col-rate">USD</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>接电 Plug-in / Power</td>
-            <td class="col-note">每箱每天</td>
-            <td class="col-rate">10.77</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>监控 Monitoring</td>
-            <td class="col-note">每箱每天</td>
-            <td class="col-rate">6.00</td>
-            <td class="col-rate">15.60</td>
-          </tr>
-          <tr>
-            <td>PTI检测 Pre-trip Inspection</td>
-            <td class="col-note">空冷藏箱预检</td>
-            <td class="col-rate">10.77</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>预冷 Pre-cool Charge</td>
-            <td class="col-note">空冷藏箱预冷</td>
-            <td class="col-rate">10.77</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>冷藏发电机组 Genset Clip-on</td>
-            <td class="col-note">每次装/拆</td>
-            <td class="col-rate">10.77</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>Genset 存放 Storage</td>
-            <td class="col-note">每台每天</td>
-            <td class="col-rate">6.46</td>
-            <td class="col-rate">16.78</td>
-          </tr>
-          <tr>
-            <td>更换破损插头（堆场）</td>
-            <td class="col-note">Replace damaged plug in yard</td>
-            <td class="col-rate">16.16</td>
-            <td class="col-rate">42.01</td>
-          </tr>
-          <tr>
-            <td>更换破损插头（船上）</td>
-            <td class="col-note">Replace damaged plug on vessel</td>
-            <td class="col-rate">26.93</td>
-            <td class="col-rate">70.01</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ====== OTHER SERVICES ====== -->
-  <div class="section" id="sec-services">
-    <div class="section-card oict">
-      <h2>其他服务费 Schedule B</h2>
-      <table>
-        <thead>
-          <tr><th>项目</th><th>说明</th><th class="col-rate">20GP (USD)</th><th class="col-rate">40GP (USD)</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>改单费 Document Change</td>
-            <td class="col-note">改舱COV/改港COD/转船/空箱起退租等</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>Flat Rack 拆墙</td>
-            <td class="col-note">Knocking down collapsible side walls</td>
-            <td class="col-rate">14.01</td>
-            <td class="col-rate">14.01</td>
-          </tr>
-          <tr>
-            <td>Flat Rack 捆绑</td>
-            <td class="col-note">最多4件 · 每件</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>Open Top 顶棚</td>
-            <td class="col-note">装拆顶bow/tarpaulin/TIR cord</td>
-            <td class="col-rate">42.01</td>
-            <td class="col-rate">42.01</td>
-          </tr>
-          <tr>
-            <td>箱体清洗 Standard</td>
-            <td class="col-note">基础清洗</td>
-            <td class="col-rate">42.01</td>
-            <td class="col-rate">42.01</td>
-          </tr>
-          <tr>
-            <td>箱体清洗 High Pressure</td>
-            <td class="col-note">高压水洗</td>
-            <td class="col-rate">84.00</td>
-            <td class="col-rate">84.00</td>
-          </tr>
-          <tr>
-            <td>箱体清洗 Steam</td>
-            <td class="col-note">蒸汽清洗</td>
-            <td class="col-rate">98.04</td>
-            <td class="col-rate">98.04</td>
-          </tr>
-          <tr>
-            <td>箱体清洗 Chemical</td>
-            <td class="col-note">化学清洗</td>
-            <td class="col-rate">126.04</td>
-            <td class="col-rate">126.04</td>
-          </tr>
-          <tr>
-            <td>额外吊箱 Lift-on/off</td>
-            <td class="col-note">额外移动 · 每吊</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">42.01</td>
-          </tr>
-          <tr>
-            <td>码头内水平移动</td>
-            <td class="col-note">Horizontal movement by internal truck</td>
-            <td class="col-rate">56.03</td>
-            <td class="col-rate">56.03</td>
-          </tr>
-          <tr>
-            <td>倒箱 Rehandle</td>
-            <td class="col-note">每次倒箱</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>修箱移箱 M&R Shifting</td>
-            <td class="col-note">CY → 修箱点 → CY · 每操作</td>
-            <td class="col-rate">70.01</td>
-            <td class="col-rate">70.01</td>
-          </tr>
-          <tr>
-            <td>Spillage Chassis</td>
-            <td class="col-note">每箱每天</td>
-            <td class="col-rate">260.00</td>
-            <td class="col-rate">260.00</td>
-          </tr>
-          <tr>
-            <td>扭锁损坏 Twist Lock</td>
-            <td class="col-note">Damaged or stuck twist lock</td>
-            <td class="col-rate">131.95</td>
-            <td class="col-rate">131.95</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-card storage">
-      <h2>超限箱 OOG Schedule C</h2>
-      <div class="info-box">
-        须提前48h向OICT客服部提交OOG申请单（包含货物尺寸/重量/图片/船期/箱位）；平板箱侧壁须立起、角件可正常挂吊；IMCO 1/4.2/5/7（活性炭等）禁止存放码头。
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>设备/柜型</th>
-            <th>超限程度</th>
-            <th>20GP (OMR)</th>
-            <th>40GP (OMR)</th>
-            <th>20GP (USD)</th>
-            <th>40GP (USD)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>普通平板箱 Flat Rack</td>
-            <td class="col-note">In Gauge（正常规格）</td>
-            <td class="col-rate">+50% THC</td>
-            <td class="col-rate">+50% THC</td>
-            <td class="col-rate">+50% THC</td>
-            <td class="col-rate">+50% THC</td>
-          </tr>
-          <tr>
-            <td>Open Top / Flat Rack</td>
-            <td class="col-note">超限高度吊具 Vertical Height Spreader · 3.5t内</td>
-            <td class="col-rate">129.26</td>
-            <td class="col-rate">172.34</td>
-            <td class="col-rate">336.08</td>
-            <td class="col-rate">448.08</td>
-          </tr>
-          <tr>
-            <td>Flat Rack / Platform</td>
-            <td class="col-note">超限吊钩 Beam / 链索 / 钢丝绳 · 4.1t内</td>
-            <td class="col-rate">215.42</td>
-            <td class="col-rate">258.50</td>
-            <td class="col-rate">560.10</td>
-            <td class="col-rate">672.10</td>
-          </tr>
-          <tr>
-            <td>Open Top</td>
-            <td class="col-note">超限吊钩 Beam · 5.1t内</td>
-            <td class="col-rate">517.05</td>
-            <td class="col-rate">517.05</td>
-            <td class="col-rate">1,344.33</td>
-            <td class="col-rate">1,344.33</td>
-          </tr>
-          <tr class="row-dg">
-            <td colspan="6"><strong>误报/未申报处罚</strong>：$1,248.00 / move（OOG尺寸+重量误报，或危险品未申报）</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ====== LOCAL CHARGES ====== -->
-  <div class="section" id="sec-local">
-    <div class="section-card local">
-      <h2>本地附加费 Schedule E</h2>
-      <table>
-        <thead>
-          <tr><th>项目</th><th>说明</th><th class="col-rate">20GP (USD)</th><th class="col-rate">40GP (USD)</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>出口备案 ESN</td>
-            <td class="col-note">Export Shipping Note · 每票报关/订舱</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>放货单 CRO</td>
-            <td class="col-note">Cargo Release Order · 每票报关/BL</td>
-            <td class="col-rate">28.00</td>
-            <td class="col-rate">28.00</td>
-          </tr>
-          <tr>
-            <td>文件费 Documentation</td>
-            <td class="col-note">每箱</td>
-            <td class="col-rate">1.66</td>
-            <td class="col-rate">1.66</td>
-          </tr>
-          <tr>
-            <td>磅单 VGM（进口）</td>
-            <td class="col-note">Weighment Certificate Import</td>
-            <td class="col-rate">11.19</td>
-            <td class="col-rate">11.19</td>
-          </tr>
-          <tr>
-            <td>磅单 VGM（出口 SOLAS）</td>
-            <td class="col-note">Weighment Certificate Export SOLAS</td>
-            <td class="col-rate">16.78</td>
-            <td class="col-rate">16.78</td>
-          </tr>
-          <tr>
-            <td>集卡装卸费 Truck Load/Unload</td>
-            <td class="col-note">每箱每动作</td>
-            <td class="col-rate">13.00</td>
-            <td class="col-rate">26.00</td>
-          </tr>
-          <tr>
-            <td>查验费 ≤1小时</td>
-            <td class="col-note">Inspection within 1 hour</td>
-            <td class="col-rate">57.20</td>
-            <td class="col-rate">85.80</td>
-          </tr>
-          <tr>
-            <td>查验费 1-4小时</td>
-            <td class="col-note">Inspection 1-4 hours</td>
-            <td class="col-rate">80.60</td>
-            <td class="col-rate">158.60</td>
-          </tr>
-          <tr>
-            <td>查验额外人工</td>
-            <td class="col-note">Extra labour per man-hour</td>
-            <td class="col-rate">13.00</td>
-            <td class="col-rate">13.00</td>
-          </tr>
-          <tr>
-            <td>封条费 Seal</td>
-            <td class="col-note">每条</td>
-            <td class="col-rate">6.98</td>
-            <td class="col-rate">6.98</td>
-          </tr>
-          <tr>
-            <td>查验移箱</td>
-            <td class="col-note">CY → Inspection bay → CY</td>
-            <td class="col-rate">70.01</td>
-            <td class="col-rate">70.01</td>
-          </tr>
-          <tr>
-            <td>扫描费 Container Scanning</td>
-            <td class="col-note">每箱每次</td>
-            <td class="col-rate">36.40</td>
-            <td class="col-rate">36.40</td>
-          </tr>
-          <tr>
-            <td>放射性检测 Radioactive</td>
-            <td class="col-note">每箱每次</td>
-            <td class="col-rate">5.20</td>
-            <td class="col-rate">5.20</td>
-          </tr>
-          <tr>
-            <td>农业查验 Agriculture Inspection</td>
-            <td class="col-note">每箱</td>
-            <td class="col-rate">33.45</td>
-            <td class="col-rate">33.45</td>
-          </tr>
-          <tr>
-            <td>OOG进口附加</td>
-            <td class="col-note">进口超限箱附加</td>
-            <td class="col-rate">77.01</td>
-            <td class="col-rate">77.01</td>
-          </tr>
-          <tr class="row-dg">
-            <td>误报/迟报/未报罚款</td>
-            <td class="col-note">含重量误报、逾期不返空箱等</td>
-            <td class="col-rate">130.00</td>
-            <td class="col-rate">130.00</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ====== SIPC PORT DUES ====== -->
-  <div class="section" id="sec-sipc">
-    <div class="section-card sipc">
-      <h2>SIPC · 港口费 Port Dues</h2>
-      <div class="info-box">
-        <strong>适用方：</strong>Sohar Industrial Port Company SAOC（SIPC）· 网址：soharportfreezone.com<br>
-        <strong>计费单位：</strong>GRT（总吨）按ITTC证书计算；USD / OMR双币种报价<br>
-        <strong>VAT：</strong>国内靠泊（始末港均在阿曼境内）加收5% VAT；国际靠泊免征 VAT<br>
-        <strong>付款：</strong>发票日后30天内付款；银行保函最低 OMR 5,000
-      </div>
-
-      <h3 style="font-size:14px;margin:16px 0 10px;color:var(--sipc);">港内锚地 Port Dues — Inner Port Basin</h3>
-      <table>
-        <thead>
-          <tr><th>船型分类</th><th>前5天费率（每GRT）</th><th>第6天起（每GRT/天）</th><th>备注</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>液体货船 Liquid / Tanker</td>
-            <td class="col-rate">见 Annex 1</td>
-            <td class="col-rate">见 Annex 1</td>
-            <td class="col-note">Oil/Chemical/Gas Tanker</td>
-          </tr>
-          <tr>
-            <td>普通货船 General Cargo</td>
-            <td class="col-rate">见 Annex 1</td>
-            <td class="col-rate">见 Annex 1</td>
-            <td class="col-note">含集装箱船 Container Ship</td>
-          </tr>
-          <tr>
-            <td>汽车运输船/滚装船 Car Carrier / RoRo</td>
-            <td class="col-rate">见 Annex 1</td>
-            <td class="col-rate">见 Annex 1</td>
-            <td class="col-note">按 GRT 递减阶梯计费</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h3 style="font-size:14px;margin:16px 0 10px;color:var(--sipc);">港外锚地 Port Dues — Outer / VALE Jetties</h3>
-      <table>
-        <thead>
-          <tr><th>区域</th><th>船型</th><th>前5天（每GRT）</th><th>第6天起（每GRT/天）</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>VALE Jetties</td>
-            <td>General Cargo</td>
-            <td class="col-rate">见 Annex 1</td>
-            <td class="col-rate">见 Annex 1</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <p class="note-row">
-        ⚠️ 详细GRT单价请参阅原版 Tariff PDF Annex 1（PDF内已加密/图像格式，需联系 SIPC 商务部门获取）。<br>
-        计费规则：每24小时为1天（不按日历日）；进出防波堤（BW1/BW2）时间分别起算；同一航次内进出间隔>120小时重新计费。
-      </p>
-    </div>
-
-    <div class="section-card sipc">
-      <h2>SIPC · 引航、拖轮、系解缆</h2>
-      <div class="info-box">
-        <strong>引航 Pilotage：</strong>按 LOA（船长）× 靠泊类型收费；由持牌引航员执行<br>
-        <strong>拖轮 Tug Assist：</strong>按船型、GRT、拖带时长分阶梯收费<br>
-        <strong>系解缆 Mooring/Unmooring：</strong>按次收费<br>
-        <strong>锚泊 Anchorage：</strong>单独计费体系
-      </div>
-      <p class="note-row" style="padding-top:10px;">
-        详细费率请参阅原版 Tariff PDF Article 6-9（引航、拖轮详细费率见 Annex 1）。
-      </p>
-    </div>
-  </div>
-
-</div>
-
-<!-- Footer -->
-<div class="footer">
-  数据来源：SOHAR Port Tariff 2025/2026（SIPC）+ OICT Tariff Book 2026 v1.0（Hutchison Ports Oman）<br>
-  汇率参考：1 OMR ≈ 2.597 USD · 本页面仅供参考，实际费率以官方文件为准
 </div>
 
 <script>
-  function switchTab(tab) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('sec-' + tab).classList.add('active');
-    event.target.classList.add('active');
+// ===== I18N =====
+const i18n = {
+  zh: {
+    'logo-title': '全球港口公共费率查询',
+    'hero-sub': '覆盖中国大陆 · 台湾 · 香港 · 东南亚 · 红海 · 土耳其 · 黑海',
+    'lbl-kw': '关键词 / Keyword',
+    'lbl-type': '费用类型 / Fee Type',
+    'lbl-currency': '货币 / Currency',
+    'th-region': '区域',
+    'th-port': '港口',
+    'th-country': '国家',
+    'th-box-type': '箱型',
+    'th-fee': '费用类型',
+    'th-rate': '费率',
+    'th-basis': '计费单位',
+    'th-note': '备注',
+    'th-source': '来源',
+    'th-pricing': '定价性质',
+    'tab-all': '全部 All',
+    'tab-china': '🇨🇳 中国大陆',
+    'tab-taiwan': '🇹🇼 台湾',
+    'tab-hk': '🇭🇰 香港',
+    'tab-sea': '🌏 东南亚',
+    'tab-redsea': '🔴 红海',
+    'tab-turkey': '🇹🇷 土耳其',
+    'tab-blacksea': '🌊 黑海',
+    'btn-export': '📥 导出 CSV',
+    'disclaimer': '⚠️ 本工具所列费率为公开发布的参考信息，实际费率以各港口官方公告为准。费用可能因航线、货物类型、箱型、船型及泊位情况而有所不同。建议在订舱前与目的港代理确认最新费率。',
+  },
+  en: {
+    'logo-title': 'Global Port Public Tariff Search',
+    'hero-sub': 'China · Taiwan · Hong Kong · SE Asia · Red Sea · Turkey · Black Sea',
+    'lbl-kw': 'Keyword',
+    'lbl-type': 'Fee Type',
+    'lbl-currency': 'Currency',
+    'th-region': 'Region',
+    'th-port': 'Port',
+    'th-country': 'Country',
+    'th-box-type': 'Box Type',
+    'th-fee': 'Fee Type',
+    'th-rate': 'Rate',
+    'th-basis': 'Unit',
+    'th-note': 'Notes',
+    'th-source': 'Source',
+    'th-pricing': 'Price Type',
+    'tab-all': '全部 All',
+    'tab-china': '🇨🇳 China',
+    'tab-taiwan': '🇹🇼 Taiwan',
+    'tab-hk': '🇭🇰 Hong Kong',
+    'tab-sea': '🌏 SE Asia',
+    'tab-redsea': '🔴 Red Sea',
+    'tab-turkey': '🇹🇷 Turkey',
+    'tab-blacksea': '🌊 Black Sea',
+    'btn-export': '📥 Export CSV',
+    'disclaimer': '⚠️ Rates shown are publicly available reference information only. Actual rates are subject to official port announcements. Fees may vary by route, cargo type, container type, vessel size and berth availability. Confirm with destination agents before booking.',
   }
+};
 
-  function doSearch() {
-    const q = document.getElementById('searchInput').value.trim().toLowerCase();
-    if (!q) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById('sec-summary').classList.add('active');
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector('.tab-btn').classList.add('active');
-      return;
-    }
-    // Show summary section with filtered view
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById('sec-summary').classList.add('active');
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('.tab-btn').classList.add('active');
+let currentLang = 'zh';
 
-    // Remove old highlights
-    document.querySelectorAll('mark').forEach(m => {
-      const t = document.createTextNode(m.textContent);
-      m.parentNode.replaceChild(t, m);
-    });
-
-    if (!q) return;
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-    const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach(node => {
-      const text = node.textContent;
-      if (text.length < 2) return;
-      const regex = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-      if (regex.test(text)) {
-        const span = document.createElement('span');
-        span.innerHTML = text.replace(regex, '<mark>$1</mark>');
-        if (node.parentNode.tagName !== 'SCRIPT' && node.parentNode.tagName !== 'STYLE') {
-          node.parentNode.replaceChild(span, node);
-        }
-      }
-    });
-
-    const found = document.querySelectorAll('mark').length;
-    if (found === 0) {
-      alert('未找到包含 "' + q + '" 的结果');
-    }
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-zh').classList.toggle('active', lang==='zh');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  const t = i18n[lang];
+  for (const [id, val] of Object.entries(t)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
   }
+  document.getElementById('inp-kw').placeholder = lang==='zh'? '港口名称、国家、费用类型...' : 'Port name, country, fee type...';
+  renderTable();
+}
 
-  document.getElementById('searchInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') doSearch();
+
+// ===== DATA =====
+const DATA = [
+  {
+    "region": "china",
+    "port_zh": "上海港",
+    "port_en": "Shanghai Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.158",
+    "currency": "CNY",
+    "note_zh": "国际航线外贸货物",
+    "note_en": "Foreign trade vessels",
+    "source": "交通运输部 交水规〔2019〕2号",
+    "src_url": "https://xxgk.mot.gov.cn/2020/jigou/syj/202006/P020200623712635662593.doc",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "上海港",
+    "port_en": "Shanghai Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.23–0.58",
+    "currency": "CNY",
+    "note_zh": "分7档递减：<10000GT最高0.58；>50000GT最低0.23",
+    "note_en": "7 tiers, decreases with GT: <10000→0.58; >50000→0.23",
+    "source": "交通运输部 交水规〔2019〕2号 表5",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "上海港",
+    "port_en": "Shanghai Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "拖轮费",
+    "fee_en": "Towage",
+    "basis_zh": "元/马力·时",
+    "basis_en": "CNY/HP/hour",
+    "rate": "80–120",
+    "currency": "CNY",
+    "note_zh": "最低2小时；峡江段另议",
+    "note_en": "Min. 2 hours; Bosphorus negotiable",
+    "source": "交通运输部 交水规〔2019〕2号 表8",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "上海港",
+    "port_en": "Shanghai Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口设施保安费",
+    "fee_en": "Port Facility Security",
+    "basis_zh": "元/TEU·次",
+    "basis_en": "CNY/TEU/call",
+    "rate": "10",
+    "currency": "CNY",
+    "note_zh": "国际航线外贸集装箱",
+    "note_en": "Foreign trade containers",
+    "source": "交通运输部 交水规〔2019〕2号 表4",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "上海港",
+    "port_en": "Shanghai Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "china",
+    "port_zh": "宁波舟山港",
+    "port_en": "Ningbo-Zhoushan Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.152",
+    "currency": "CNY",
+    "note_zh": "国际航线适用",
+    "note_en": "International voyages",
+    "source": "交通运输部 交水规〔2019〕2号",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "宁波舟山港",
+    "port_en": "Ningbo-Zhoushan Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.21–0.55",
+    "currency": "CNY",
+    "note_zh": "分7档，>60000GT另议",
+    "note_en": "7 tiers, >60000GT negotiable",
+    "source": "交通运输部 交水规〔2019〕2号 表5",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "宁波舟山港",
+    "port_en": "Ningbo-Zhoushan Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "拖轮费",
+    "fee_en": "Towage",
+    "basis_zh": "元/马力·时",
+    "basis_en": "CNY/HP/hour",
+    "rate": "78–115",
+    "currency": "CNY",
+    "note_zh": "最低2小时",
+    "note_en": "Min. 2 hours",
+    "source": "交通运输部 交水规〔2019〕2号 表8",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "宁波舟山港",
+    "port_en": "Ningbo-Zhoushan Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "china",
+    "port_zh": "深圳港",
+    "port_en": "Shenzhen Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.155",
+    "currency": "CNY",
+    "note_zh": "国际航线适用",
+    "note_en": "International voyages",
+    "source": "交通运输部 交水规〔2019〕2号",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "深圳港",
+    "port_en": "Shenzhen Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.22–0.56",
+    "currency": "CNY",
+    "note_zh": "分7档递减",
+    "note_en": "7-tier decreasing rate",
+    "source": "交通运输部 交水规〔2019〕2号 表5",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "深圳港",
+    "port_en": "Shenzhen Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口设施保安费",
+    "fee_en": "Port Facility Security",
+    "basis_zh": "元/TEU·次",
+    "basis_en": "CNY/TEU/call",
+    "rate": "10",
+    "currency": "CNY",
+    "note_zh": "国际航线外贸集装箱",
+    "note_en": "Foreign trade containers",
+    "source": "交通运输部 交水规〔2019〕2号 表4",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "深圳港",
+    "port_en": "Shenzhen Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "china",
+    "port_zh": "广州港",
+    "port_en": "Guangzhou Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.145",
+    "currency": "CNY",
+    "note_zh": "国际航线适用",
+    "note_en": "International voyages",
+    "source": "交通运输部 交水规〔2019〕2号",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "广州港",
+    "port_en": "Guangzhou Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.20–0.52",
+    "currency": "CNY",
+    "note_zh": "分7档递减",
+    "note_en": "7-tier decreasing rate",
+    "source": "交通运输部 交水规〔2019〕2号 表5",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "广州港",
+    "port_en": "Guangzhou Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "系泊费",
+    "fee_en": "Mooring/Unmooring",
+    "basis_zh": "元/次",
+    "basis_en": "CNY/operation",
+    "rate": "1,800–3,500",
+    "currency": "CNY",
+    "note_zh": "按船长分档",
+    "note_en": "Tiered by LOA",
+    "source": "广州港集团公示",
+    "src_url": "https://www.gzport.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "广州港",
+    "port_en": "Guangzhou Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "china",
+    "port_zh": "天津港",
+    "port_en": "Tianjin Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.158",
+    "currency": "CNY",
+    "note_zh": "国际航线适用",
+    "note_en": "International voyages",
+    "source": "交通运输部 交水规〔2019〕2号",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "天津港",
+    "port_en": "Tianjin Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.23–0.57",
+    "currency": "CNY",
+    "note_zh": "分7档递减",
+    "note_en": "7-tier decreasing rate",
+    "source": "交通运输部 交水规〔2019〕2号 表5",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "天津港",
+    "port_en": "Tianjin Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "泊位费",
+    "fee_en": "Berth Dues",
+    "basis_zh": "元/GT·天",
+    "basis_en": "CNY/GT/day",
+    "rate": "0.11",
+    "currency": "CNY",
+    "note_zh": "靠泊期间按自然日计",
+    "note_en": "Per calendar day alongside",
+    "source": "天津港集团公示",
+    "src_url": "https://www.tjport.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "天津港",
+    "port_en": "Tianjin Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "china",
+    "port_zh": "青岛港",
+    "port_en": "Qingdao Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.160",
+    "currency": "CNY",
+    "note_zh": "国际航线适用",
+    "note_en": "International voyages",
+    "source": "交通运输部 交水规〔2019〕2号",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "青岛港",
+    "port_en": "Qingdao Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.20–0.50",
+    "currency": "CNY",
+    "note_zh": "分7档递减",
+    "note_en": "7-tier decreasing rate",
+    "source": "交通运输部 交水规〔2019〕2号 表5",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "青岛港",
+    "port_en": "Qingdao Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "拖轮费",
+    "fee_en": "Towage",
+    "basis_zh": "元/马力·时",
+    "basis_en": "CNY/HP/hour",
+    "rate": "82–118",
+    "currency": "CNY",
+    "note_zh": "最低2小时",
+    "note_en": "Min. 2 hours",
+    "source": "交通运输部 交水规〔2019〕2号 表8",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "青岛港",
+    "port_en": "Qingdao Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "china",
+    "port_zh": "厦门港",
+    "port_en": "Xiamen Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.148",
+    "currency": "CNY",
+    "note_zh": "国际航线适用",
+    "note_en": "International voyages",
+    "source": "交通运输部 交水规〔2019〕2号",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "厦门港",
+    "port_en": "Xiamen Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GT·次",
+    "basis_en": "CNY/GT/call",
+    "rate": "0.21–0.54",
+    "currency": "CNY",
+    "note_zh": "分7档递减",
+    "note_en": "7-tier decreasing rate",
+    "source": "交通运输部 交水规〔2019〕2号 表5",
+    "src_url": "https://www.mot.gov.cn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "china",
+    "port_zh": "厦门港",
+    "port_en": "Xiamen Port",
+    "country_zh": "中国大陆",
+    "country_en": "China",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "taiwan",
+    "port_zh": "高雄港",
+    "port_en": "Kaohsiung Port",
+    "country_zh": "台湾",
+    "country_en": "Taiwan",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/FT·次",
+    "basis_en": "NTD/GRT/call",
+    "rate": "0.45",
+    "currency": "USD",
+    "note_zh": "按船舶总吨GRT一次性计收",
+    "note_en": "Per GRT per call",
+    "source": "台湾港务公司 港埠業務費率",
+    "src_url": "https://kh.twport.com.tw/zh-TW/about/Articles?a=2431",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "taiwan",
+    "port_zh": "高雄港",
+    "port_en": "Kaohsiung Port",
+    "country_zh": "台湾",
+    "country_en": "Taiwan",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "USD/GRT/call",
+    "rate": "0.38",
+    "currency": "USD",
+    "note_zh": "按船舶总吨GRT一次性计收",
+    "note_en": "Per GRT per call",
+    "source": "台湾港务公司",
+    "src_url": "https://www.twport.com.tw",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "taiwan",
+    "port_zh": "高雄港",
+    "port_en": "Kaohsiung Port",
+    "country_zh": "台湾",
+    "country_en": "Taiwan",
+    "fee_zh": "拖轮费",
+    "fee_en": "Towage",
+    "basis_zh": "元/次",
+    "basis_en": "USD/operation",
+    "rate": "850–1,800",
+    "currency": "USD",
+    "note_zh": "按船长及吨位分档",
+    "note_en": "Tiered by LOA and GRT",
+    "source": "台湾港务公司",
+    "src_url": "https://www.twport.com.tw",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "taiwan",
+    "port_zh": "高雄港",
+    "port_en": "Kaohsiung Port",
+    "country_zh": "台湾",
+    "country_en": "Taiwan",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "请询当地码头",
+    "basis_en": "Inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "台湾港务公司官网有完整费率表（含各箱型），因访问受限暂未获取，请联系当地码头或代理询价",
+    "note_en": "Official rates from Taiwan Port Corp; access limited. Inquire locally.",
+    "source": "台湾港务公司 港埠業務費率表",
+    "src_url": "https://kh.twport.com.tw/zh-TW/about/Articles?a=2431",
+    "pricing_type": "market"
+  },
+  {
+    "region": "taiwan",
+    "port_zh": "基隆港",
+    "port_en": "Keelung Port",
+    "country_zh": "台湾",
+    "country_en": "Taiwan",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "USD/GRT/call",
+    "rate": "0.42",
+    "currency": "USD",
+    "note_zh": "按船舶总吨GRT一次性计收",
+    "note_en": "Per GRT per call",
+    "source": "台湾港务公司",
+    "src_url": "https://www.twport.com.tw",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "taiwan",
+    "port_zh": "基隆港",
+    "port_en": "Keelung Port",
+    "country_zh": "台湾",
+    "country_en": "Taiwan",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "taiwan",
+    "port_zh": "台中港",
+    "port_en": "Taichung Port",
+    "country_zh": "台湾",
+    "country_en": "Taiwan",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "hk",
+    "port_zh": "香港港",
+    "port_en": "Hong Kong Port",
+    "country_zh": "香港",
+    "country_en": "Hong Kong",
+    "fee_zh": "领港费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "HKD/GRT/call",
+    "rate": "0.28–0.72",
+    "currency": "HKD",
+    "note_zh": "分5档递减；>30000GRT按协商",
+    "note_en": "5-tier decreasing; >30000GRT negotiable",
+    "source": "香港海事处 领港(費用)令 Cap.84D",
+    "src_url": "https://www.elegislation.gov.hk/hk/cap84D",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "hk",
+    "port_zh": "香港港",
+    "port_en": "Hong Kong Port",
+    "country_zh": "香港",
+    "country_en": "Hong Kong",
+    "fee_zh": "锚地费",
+    "fee_en": "Anchorage Dues",
+    "basis_zh": "元/GRT·小时",
+    "basis_en": "HKD/GRT/hour",
+    "rate": "0.02",
+    "currency": "HKD",
+    "note_zh": "维多利亚港内；>12小时后起算，最低HK$100",
+    "note_en": "VHP limits; after 12h, min HK$100",
+    "source": "香港海事处",
+    "src_url": "https://www.mardep.gov.hk",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "hk",
+    "port_zh": "香港港",
+    "port_en": "Hong Kong Port",
+    "country_zh": "香港",
+    "country_en": "Hong Kong",
+    "fee_zh": "港口结关费",
+    "fee_en": "Port Clearance Fee",
+    "basis_zh": "元/艘",
+    "basis_en": "HKD/vessel",
+    "rate": "58",
+    "currency": "HKD",
+    "note_zh": "每次进港结关",
+    "note_en": "Per vessel arrival",
+    "source": "香港海事处",
+    "src_url": "https://www.mardep.gov.hk",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "hk",
+    "port_zh": "香港港",
+    "port_en": "Hong Kong Port",
+    "country_zh": "香港",
+    "country_en": "Hong Kong",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "新加坡港",
+    "port_en": "Singapore Port",
+    "country_zh": "新加坡",
+    "country_en": "Singapore",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/100GRT·天",
+    "basis_en": "SGD/100GRT/day",
+    "rate": "8.00–9.50",
+    "currency": "SGD",
+    "note_zh": "按在港天数累进：Day1=8; Day2=8.5; Day3=9; Day4=9.5; Day5+=12.5+",
+    "note_en": "Day1=8; Day2=8.5; Day3=9; Day4=9.5; Day5+=12.5+",
+    "source": "MPA Singapore — Scale of Dues, Rates and General Fees",
+    "src_url": "https://sso.agc.gov.sg/SL/MPASA1996-N2",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "新加坡港",
+    "port_en": "Singapore Port",
+    "country_zh": "新加坡",
+    "country_en": "Singapore",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/小时",
+    "basis_en": "SGD/hour",
+    "rate": "236–783",
+    "currency": "SGD",
+    "note_zh": "按GRT分档；≤6000GRT=236/h；每增10000GRT约+26/h；需提前6h预约",
+    "note_en": "GRT-based tiers; ≤6000GRT=236/h; +26/h per 10000GRT; book 6h ahead",
+    "source": "PSA Marine — Pilotage Circular 30 Jan 2026, eff. 1 Mar 2026",
+    "src_url": "https://www.psamarine.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "新加坡港",
+    "port_en": "Singapore Port",
+    "country_zh": "新加坡",
+    "country_en": "Singapore",
+    "fee_zh": "拖轮费",
+    "fee_en": "Towage",
+    "basis_zh": "元/首小时",
+    "basis_en": "SGD/first hour",
+    "rate": "486–1,830",
+    "currency": "SGD",
+    "note_zh": "按GRT分档：≤10000=486；10001-15000=550；每30分钟加半价；LOA<120m+侧推=1艘",
+    "note_en": "GRT-based; per 30min = half rate; LOA<120m+thruster=1 tug",
+    "source": "MPA Singapore / PSA Marine",
+    "src_url": "https://www.psamarine.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "新加坡港",
+    "port_en": "Singapore Port",
+    "country_zh": "新加坡",
+    "country_en": "Singapore",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "巴生港",
+    "port_en": "Port Klang",
+    "country_zh": "马来西亚",
+    "country_en": "Malaysia",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "MYR/GRT/call",
+    "rate": "0.28",
+    "currency": "MYR",
+    "note_zh": "外贸集装箱船舶",
+    "note_en": "Foreign trade container vessels",
+    "source": "西港 Westports Malaysia 公示",
+    "src_url": "https://www.westportsmalaysia.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "巴生港",
+    "port_en": "Port Klang",
+    "country_zh": "马来西亚",
+    "country_en": "Malaysia",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "雅加达港",
+    "port_en": "Jakarta Port (TPS/TKJ)",
+    "country_zh": "印度尼西亚",
+    "country_en": "Indonesia",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "IDR/GRT/call",
+    "rate": "见备注",
+    "currency": "IDR",
+    "note_zh": "按船舶总吨及在港时间计收",
+    "note_en": "Based on GRT and port stay duration",
+    "source": "雅加丹戎普朗克港务局 PT. Pelindo",
+    "src_url": "https://www.pelindo.co.id",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "雅加达港",
+    "port_en": "Jakarta Port (TPS/TKJ)",
+    "country_zh": "印度尼西亚",
+    "country_en": "Indonesia",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "马尼拉港",
+    "port_en": "Manila ICTSI",
+    "country_zh": "菲律宾",
+    "country_en": "Philippines",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "PHP/GRT/call",
+    "rate": "0.35",
+    "currency": "PHP",
+    "note_zh": "外贸船舶",
+    "note_en": "Foreign trade vessels",
+    "source": "马尼拉国际集装箱港 MICT",
+    "src_url": "https://www.micthdc.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "马尼拉港",
+    "port_en": "Manila ICTSI",
+    "country_zh": "菲律宾",
+    "country_en": "Philippines",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "林查班港",
+    "port_en": "Laem Chabang Port",
+    "country_zh": "泰国",
+    "country_en": "Thailand",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "THB/GRT/call",
+    "rate": "0.50",
+    "currency": "THB",
+    "note_zh": "外贸船舶按GRT一次性计收",
+    "note_en": "Per GRT per call",
+    "source": "泰国港务局 PAT",
+    "src_url": "https://www.pat.or.th",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "林查班港",
+    "port_en": "Laem Chabang Port",
+    "country_zh": "泰国",
+    "country_en": "Thailand",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "胡志明港",
+    "port_en": "Ho Chi Minh City Port (Cuchi/Cat Lai)",
+    "country_zh": "越南",
+    "country_en": "Vietnam",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "VND/GRT/call",
+    "rate": "见备注",
+    "currency": "VND",
+    "note_zh": "外贸船舶按GRT及在港时间计收",
+    "note_en": "Based on GRT and port stay",
+    "source": "西贡新港 Saigon Newport",
+    "src_url": "https://www.saigonnewport.com.vn",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "胡志明港",
+    "port_en": "Ho Chi Minh City Port (Cuchi/Cat Lai)",
+    "country_zh": "越南",
+    "country_en": "Vietnam",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "仰光港",
+    "port_en": "Yangon Port (MITT/TMIT)",
+    "country_zh": "缅甸",
+    "country_en": "Myanmar",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "sea",
+    "port_zh": "科伦坡港",
+    "port_en": "Colombo Port (JKSX/SAGT)",
+    "country_zh": "斯里兰卡",
+    "country_en": "Sri Lanka",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/TEU",
+    "basis_en": "USD/TEU",
+    "rate": "22–38",
+    "currency": "USD",
+    "note_zh": "按在港天数及箱量分档",
+    "note_en": "Tiered by days and TEU volume",
+    "source": "科伦坡港务局 SLPA",
+    "src_url": "https://www.slpa.lk",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "sea",
+    "port_zh": "科伦坡港",
+    "port_en": "Colombo Port (JKSX/SAGT)",
+    "country_zh": "斯里兰卡",
+    "country_en": "Sri Lanka",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "吉达港",
+    "port_en": "Jeddah Islamic Port",
+    "country_zh": "沙特阿拉伯",
+    "country_en": "Saudi Arabia",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "SAR/GRT/call",
+    "rate": "3.20",
+    "currency": "SAR",
+    "note_zh": "外贸船舶；含港务费",
+    "note_en": "Foreign trade vessels; incl. port dues",
+    "source": "Mawani 港务局",
+    "src_url": "https://www.mawani.gov.sa",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "吉达港",
+    "port_en": "Jeddah Islamic Port",
+    "country_zh": "沙特阿拉伯",
+    "country_en": "Saudi Arabia",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/GRT",
+    "basis_en": "SAR/GRT",
+    "rate": "见备注",
+    "currency": "SAR",
+    "note_zh": "按船长及GRT分段计收",
+    "note_en": "Segmented by LOA and GRT",
+    "source": "Mawani 港务局",
+    "src_url": "https://www.mawani.gov.sa",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "吉达港",
+    "port_en": "Jeddah Islamic Port",
+    "country_zh": "沙特阿拉伯",
+    "country_en": "Saudi Arabia",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "苏伊士港",
+    "port_en": "Port Said",
+    "country_zh": "埃及",
+    "country_en": "Egypt",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT",
+    "basis_en": "USD/GRT",
+    "rate": "见备注",
+    "currency": "USD",
+    "note_zh": "含苏伊士运河北口服务",
+    "note_en": "Incl. Suez Canal North approach services",
+    "source": "苏伊士运河管理局 SCZone",
+    "src_url": "https://www.suezcanal.gov.eg",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "苏伊士港",
+    "port_en": "Port Said",
+    "country_zh": "埃及",
+    "country_en": "Egypt",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "吉布提港",
+    "port_en": "Djibouti Port",
+    "country_zh": "吉布提",
+    "country_en": "Djibouti",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·天",
+    "basis_en": "DJF/GRT/day",
+    "rate": "见备注",
+    "currency": "DJF",
+    "note_zh": "外贸船舶按在港天数计收",
+    "note_en": "Based on GRT and port stay days",
+    "source": "吉布提港务局 PDA",
+    "src_url": "https://www.portdedjibouti.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "吉布提港",
+    "port_en": "Djibouti Port",
+    "country_zh": "吉布提",
+    "country_en": "Djibouti",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "亚喀巴港",
+    "port_en": "Aqaba Port",
+    "country_zh": "约旦",
+    "country_en": "Jordan",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "JOD/GRT/call",
+    "rate": "见备注",
+    "currency": "JOD",
+    "note_zh": "外贸船舶按GRT一次性计收",
+    "note_en": "Per GRT per call",
+    "source": "亚喀巴港务公司 AQABA",
+    "src_url": "https://www.aqabaports.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "亚喀巴港",
+    "port_en": "Aqaba Port",
+    "country_zh": "约旦",
+    "country_en": "Jordan",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "redsea",
+    "port_zh": "荷台达港",
+    "port_en": "Al Hudaydah Port",
+    "country_zh": "也门",
+    "country_en": "Yemen",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "伊斯坦布尔港",
+    "port_en": "Istanbul Port (Ambarli)",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/次（GRT分档）",
+    "basis_en": "USD/service (GRT tiered)",
+    "rate": "197/81",
+    "currency": "USD",
+    "note_zh": "其他货船：≤1000GRT=197；>1000GRT=81；峡江段另加",
+    "note_en": "Other cargo: ≤1000=197; >1000=81; Bosphorus transit extra",
+    "source": "VDA Turkish Ports Tariff 2025 / Kıyı Emniyeti",
+    "src_url": "https://vda.org.tr",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "伊斯坦布尔港",
+    "port_en": "Istanbul Port (Ambarli)",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "拖轮费",
+    "fee_en": "Towage",
+    "basis_zh": "元/次（GRT分档）",
+    "basis_en": "USD/service (GRT tiered)",
+    "rate": "373/70",
+    "currency": "USD",
+    "note_zh": "其他货船：≤1000GRT=373；>1000GRT=70；周末/节假日加收50%",
+    "note_en": "Other cargo: ≤1000=373; >1000=70; +50% on weekends/holidays",
+    "source": "VDA Turkish Ports Tariff 2025",
+    "src_url": "https://vda.org.tr",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "伊斯坦布尔港",
+    "port_en": "Istanbul Port (Ambarli)",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "系泊费",
+    "fee_en": "Mooring/Unmooring",
+    "basis_zh": "元/次（GRT分档）",
+    "basis_en": "USD/service (GRT tiered)",
+    "rate": "22/11",
+    "currency": "USD",
+    "note_zh": "其他货船：≤1000GRT=22；>1000GRT=11",
+    "note_en": "Other cargo: ≤1000=22; >1000=11",
+    "source": "VDA Turkish Ports Tariff 2025",
+    "src_url": "https://vda.org.tr",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "伊斯坦布尔港",
+    "port_en": "Istanbul Port (Ambarli)",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "伊兹密尔港",
+    "port_en": "Izmir Port (Alsancak)",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/次",
+    "basis_en": "USD/service",
+    "rate": "见备注",
+    "currency": "USD",
+    "note_zh": "按GRT分档；地中海沿海船舶标准",
+    "note_en": "GRT-based tier; Mediterranean coastal vessel rate",
+    "source": "Kıyı Emniyeti VDA Tariff 2025",
+    "src_url": "https://vda.org.tr",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "伊兹密尔港",
+    "port_en": "Izmir Port (Alsancak)",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "梅尔辛港",
+    "port_en": "Mersin Port",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·次",
+    "basis_en": "USD/GRT/call",
+    "rate": "见备注",
+    "currency": "USD",
+    "note_zh": "外贸船舶按GRT计收",
+    "note_en": "Foreign trade vessels per GRT",
+    "source": "TCDD Mersin Port",
+    "src_url": "https://www.mersinport.com.tr",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "梅尔辛港",
+    "port_en": "Mersin Port",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "turkey",
+    "port_zh": "博斯普鲁斯海峡",
+    "port_en": "Bosphorus Strait",
+    "country_zh": "土耳其",
+    "country_en": "Turkey",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/次（峡江段）",
+    "basis_en": "USD/transit",
+    "rate": "550/100",
+    "currency": "USD",
+    "note_zh": "峡江过境：≤1000GRT=550；>1000GRT=100",
+    "note_en": "Strait transit: ≤1000=550; >1000=100",
+    "source": "Kıyı Emniyeti — VDA Tariff 2025",
+    "src_url": "https://vda.org.tr",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "康斯坦察港",
+    "port_en": "Constanta Port",
+    "country_zh": "罗马尼亚",
+    "country_en": "Romania",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·天",
+    "basis_en": "EUR/GRT/day",
+    "rate": "见备注",
+    "currency": "EUR",
+    "note_zh": "外贸船舶按GRT及在港天数计收",
+    "note_en": "Based on GRT and port stay days",
+    "source": "康斯坦察港务局 CN APDF",
+    "src_url": "https://www.portofconstantza.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "康斯坦察港",
+    "port_en": "Constanta Port",
+    "country_zh": "罗马尼亚",
+    "country_en": "Romania",
+    "fee_zh": "引航费",
+    "fee_en": "Pilotage",
+    "basis_zh": "元/次",
+    "basis_en": "EUR/movement",
+    "rate": "见备注",
+    "currency": "EUR",
+    "note_zh": "按GRT及移动次数计收",
+    "note_en": "Based on GRT and number of movements",
+    "source": "罗马尼亚海军管理局 ANR",
+    "src_url": "https://www.anr.ro",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "康斯坦察港",
+    "port_en": "Constanta Port",
+    "country_zh": "罗马尼亚",
+    "country_en": "Romania",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "瓦尔纳港",
+    "port_en": "Varna Port",
+    "country_zh": "保加利亚",
+    "country_en": "Bulgaria",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT",
+    "basis_en": "BGN/GRT",
+    "rate": "见备注",
+    "currency": "BGN",
+    "note_zh": "外贸船舶按GRT计收",
+    "note_en": "Foreign trade vessels per GRT",
+    "source": "瓦尔纳港务局 Port of Varna",
+    "src_url": "https://www.portvarna.bg",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "瓦尔纳港",
+    "port_en": "Varna Port",
+    "country_zh": "保加利亚",
+    "country_en": "Bulgaria",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "敖德萨港",
+    "port_en": "Odessa Port",
+    "country_zh": "乌克兰",
+    "country_en": "Ukraine",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·天",
+    "basis_en": "UAH/GRT/day",
+    "rate": "见备注",
+    "currency": "UAH",
+    "note_zh": "外贸船舶按GRT及在港天数计收",
+    "note_en": "Based on GRT and port stay days",
+    "source": "敖德萨海港管理局",
+    "src_url": "https://www.port.odessa.ua",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "敖德萨港",
+    "port_en": "Odessa Port",
+    "country_zh": "乌克兰",
+    "country_en": "Ukraine",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "新罗西斯克港",
+    "port_en": "Novorossiysk Port",
+    "country_zh": "俄罗斯",
+    "country_en": "Russia",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT",
+    "basis_en": "RUB/GRT",
+    "rate": "见备注",
+    "currency": "RUB",
+    "note_zh": "外贸船舶按GRT计收",
+    "note_en": "Foreign trade vessels per GRT",
+    "source": "诺沃罗西斯克海港 NUTEP",
+    "src_url": "https://www.novorosport.ru",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "新罗西斯克港",
+    "port_en": "Novorossiysk Port",
+    "country_zh": "俄罗斯",
+    "country_en": "Russia",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "巴统港",
+    "port_en": "Batum Port",
+    "country_zh": "格鲁吉亚",
+    "country_en": "Georgia",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "波季港",
+    "port_en": "Poti Port",
+    "country_zh": "格鲁吉亚",
+    "country_en": "Georgia",
+    "fee_zh": "港口费",
+    "fee_en": "Port Dues",
+    "basis_zh": "元/GRT·天",
+    "basis_en": "USD/GRT/day",
+    "rate": "见备注",
+    "currency": "USD",
+    "note_zh": "外贸船舶按GRT及在港天数计收",
+    "note_en": "Based on GRT and port stay days",
+    "source": "波季海运码头 Poti Marine Terminal",
+    "src_url": "https://www.potiport.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "blacksea",
+    "port_zh": "波季港",
+    "port_en": "Poti Port",
+    "country_zh": "格鲁吉亚",
+    "country_en": "Georgia",
+    "fee_zh": "码头操作费 THC",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "市场调节价，请询当地码头",
+    "basis_en": "Market price – inquire with terminal",
+    "rate": "—",
+    "currency": "—",
+    "note_zh": "市场调节价，各码头自主定价，请直接询当地码头运营方",
+    "note_en": "Market price set by each terminal operator independently",
+    "source": "市场调节价，非政府统一定价",
+    "src_url": "",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "港口费（内港池）",
+    "fee_en": "Port Dues - Inside Basin",
+    "basis_zh": "美元/GRT·次（前5天）",
+    "basis_en": "USD/GRT/call (first 5 days)",
+    "rate": "0.3042（液货船/天然气/化学品）",
+    "currency": "USD",
+    "note_zh": "A类：液货船、天然气、化学品运输船 | 前5天/120小时",
+    "note_en": "Class A: Tanker/Gas/Chemical vessels | First 5 days",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "港口费（内港池）",
+    "fee_en": "Port Dues - Inside Basin",
+    "basis_zh": "美元/GRT·次（前5天）",
+    "basis_en": "USD/GRT/call (first 5 days)",
+    "rate": "0.0611（杂货/集装箱船）",
+    "currency": "USD",
+    "note_zh": "B类：杂货船、项目船、集装箱船 | 前5天/120小时",
+    "note_en": "Class B: General/Project/Container ships | First 5 days",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "港口费（内港池）",
+    "fee_en": "Port Dues - Inside Basin",
+    "basis_zh": "美元/GRT·次（前5天）",
+    "basis_en": "USD/GRT/call (first 5 days)",
+    "rate": "0.0335（汽车船/RORO）",
+    "currency": "USD",
+    "note_zh": "C类：汽车船/RORO | 前5天/120小时",
+    "note_en": "Class C: Car Carrier/RORO | First 5 days",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "附加港口费",
+    "fee_en": "Additional Port Dues",
+    "basis_zh": "美元/GRT·天（超5天后）",
+    "basis_en": "USD/GRT/day (after 5 days)",
+    "rate": "0.0577（液货船）",
+    "currency": "USD",
+    "note_zh": "液货船超期附加费：第6天起每日；B/C类：0.0131美元/GRT/天",
+    "note_en": "Class A tanker: per additional day after 5 days; Class B/C: 0.0131 USD/GRT/day",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "系泊费（内港池）",
+    "fee_en": "Mooring/Unmooring - Inside",
+    "basis_zh": "美元/次",
+    "basis_en": "USD/per activity",
+    "rate": "376.45（含1次靠泊+1次离泊）",
+    "currency": "USD",
+    "note_zh": "含1次靠泊+1次离泊；单次靠泊或离泊：188.22美元；周末/节假日加收50%",
+    "note_en": "Incl. 1 mooring + 1 unmooring; single: 188.22 USD; +50% on weekends/holidays",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "拖轮费（内港池）",
+    "fee_en": "Tug Charges - Inside",
+    "basis_zh": "美元/艘·小时",
+    "basis_en": "USD/tug/hour",
+    "rate": "459.49（船长0-99m）",
+    "currency": "USD",
+    "note_zh": "船长0-99.99m；最低1小时；周末/节假日加收50%；危险品船(IMDG)加收50%",
+    "note_en": "LOA 0-99.99m; min 1 hr; +50% weekends; +50% IMDG vessels",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "拖轮费（内港池）",
+    "fee_en": "Tug Charges - Inside",
+    "basis_zh": "美元/艘·小时",
+    "basis_en": "USD/tug/hour",
+    "rate": "648.70（船长100-199m）",
+    "currency": "USD",
+    "note_zh": "船长100-199.99m；最低1小时；周末/节假日加收50%；危险品船(IMDG)加收50%",
+    "note_en": "LOA 100-199.99m; min 1 hr; +50% weekends; +50% IMDG vessels",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "拖轮费（内港池）",
+    "fee_en": "Tug Charges - Inside",
+    "basis_zh": "美元/艘·小时",
+    "basis_en": "USD/tug/hour",
+    "rate": "864.94（船长200m+）",
+    "currency": "USD",
+    "note_zh": "船长200m及以上；最低1小时；周末/节假日加收50%；危险品船(IMDG)加收50%",
+    "note_en": "LOA 200m+; min 1 hr; +50% weekends; +50% IMDG vessels",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "引航费（内港池）",
+    "fee_en": "Pilotage - Inside",
+    "basis_zh": "美元/GRT·次",
+    "basis_en": "USD/GRT/movement",
+    "rate": "291.23（GRT≤2万）",
+    "currency": "USD",
+    "note_zh": "GRT≤20,000；含引航艇；周末/节假日加收50%",
+    "note_en": "GRT <=20,000; incl. pilot boat; +50% on weekends/holidays",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "引航费（内港池）",
+    "fee_en": "Pilotage - Inside",
+    "basis_zh": "美元/GRT·次",
+    "basis_en": "USD/GRT/movement",
+    "rate": "407.73（GRT 2-4万）",
+    "currency": "USD",
+    "note_zh": "GRT 20,001-40,000；含引航艇；周末/节假日加收50%",
+    "note_en": "GRT 20,001-40,000; incl. pilot boat; +50% on weekends/holidays",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "引航费（内港池）",
+    "fee_en": "Pilotage - Inside",
+    "basis_zh": "美元/GRT·次",
+    "basis_en": "USD/GRT/movement",
+    "rate": "582.46（GRT 4-8万）",
+    "currency": "USD",
+    "note_zh": "GRT 40,001-80,000；含引航艇；周末/节假日加收50%",
+    "note_en": "GRT 40,001-80,000; incl. pilot boat; +50% weekends/holidays",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "引航费（内港池）",
+    "fee_en": "Pilotage - Inside",
+    "basis_zh": "美元/GRT·次",
+    "basis_en": "USD/GRT/movement",
+    "rate": "698.95（GRT 8-12万）",
+    "currency": "USD",
+    "note_zh": "GRT 80,001-120,000；含引航艇；周末/节假日加收50%",
+    "note_en": "GRT 80,001-120,000; incl. pilot boat; +50% weekends/holidays",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "引航费（内港池）",
+    "fee_en": "Pilotage - Inside",
+    "basis_zh": "美元/GRT·次",
+    "basis_en": "USD/GRT/movement",
+    "rate": "815.46（GRT>12万）",
+    "currency": "USD",
+    "note_zh": "GRT >120,000；含引航艇；周末/节假日加收50%",
+    "note_en": "GRT >120,000; incl. pilot boat; +50% weekends/holidays",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "锚地费",
+    "fee_en": "Anchorage Dues",
+    "basis_zh": "美元/天",
+    "basis_en": "USD/day",
+    "rate": "0（0-10天免费）",
+    "currency": "USD",
+    "note_zh": "锚泊0-10天免费；11-15天：527.07美元/天；16-20天：1054.14美元/天；21天+：1756.91美元/天",
+    "note_en": "0-10 days FREE; 11-15d: 527 USD/d; 16-20d: 1054 USD/d; 21d+: 1757 USD/d",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "STS船对船服务",
+    "fee_en": "STS Ship-to-Ship",
+    "basis_zh": "美元/次",
+    "basis_en": "USD/operation",
+    "rate": "14185.37（锚泊STS）",
+    "currency": "USD",
+    "note_zh": "锚泊STS作业；航行STS：11915.70美元；拖轮另计（首2小时851.12美元/小时，第3小时起425.57美元/小时）",
+    "note_en": "STS at anchorage; underway: 11,916 USD; tug extra (first 2hr: 851 USD/hr, after: 426 USD/hr)",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "港口清关费",
+    "fee_en": "Port Clearance",
+    "basis_zh": "美元/次",
+    "basis_en": "USD/clearance",
+    "rate": "473.02",
+    "currency": "USD",
+    "note_zh": "港口清关服务；需至少2项其他海运服务或250吨以上加油",
+    "note_en": "Per clearance; requires min 2 other marine services or 250t+ bunkering",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "长期锚泊/封存费",
+    "fee_en": "Lay-up Services",
+    "basis_zh": "美元/月（起）",
+    "basis_en": "USD/month (min)",
+    "rate": "17798.92（起租30天）",
+    "currency": "USD",
+    "note_zh": "长期锚泊/封存：每月17798.92美元（30天起）；超30天后每天593.29美元",
+    "note_en": "Monthly rate (min 30 days); additional days: 593 USD/day after 30 days",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "环保费",
+    "fee_en": "Environmental Fee",
+    "basis_zh": "美元/次",
+    "basis_en": "USD/call",
+    "rate": "334.19（≤2万GRT）",
+    "currency": "USD",
+    "note_zh": "GRT<=2万：334.19美元；2-5万：445.59美元；>5万：556.98美元；<400GRT或仅锚泊船舶豁免",
+    "note_en": "GRT <=20k: 334 USD; 20k-50k: 446 USD; >50k: 557 USD; exempt: <400 GRT or anchorage-only",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港",
+    "port_en": "Port of Sohar",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "项目货物附加费",
+    "fee_en": "Project Cargo Surcharge",
+    "basis_zh": "美元/吨",
+    "basis_en": "USD/freight ton",
+    "rate": "1.35",
+    "currency": "USD",
+    "note_zh": "目的港为苏哈尔港特许区内的项目货物；集装箱货物豁免",
+    "note_en": "For project cargo destined inside Sohar concession area; containerised cargo exempt",
+    "source": "SIPC Sohar Port Tariff 2025/2026",
+    "src_url": "https://www.soharportandfreezone.com",
+    "pricing_type": "gov_regulated"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "码头装卸费（THC）",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "美元/TEU",
+    "basis_en": "USD/TEU",
+    "rate": "112.03（进口重箱20尺）",
+    "currency": "USD",
+    "note_zh": "OICT Hutchison Ports Sohar | 进口重箱：20尺112.03美元，40尺154.04美元",
+    "note_en": "OICT Hutchison Ports Sohar | Import laden: 20ft 112 USD, 40ft 154 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "码头装卸费（THC）",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "美元/TEU",
+    "basis_en": "USD/TEU",
+    "rate": "140.03（出口重箱20尺）",
+    "currency": "USD",
+    "note_zh": "OICT Hutchison Ports Sohar | 出口重箱：20尺140.03美元，40尺196.05美元",
+    "note_en": "OICT Hutchison Ports Sohar | Export laden: 20ft 140 USD, 40ft 196 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "码头装卸费（THC）",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "美元/TEU",
+    "basis_en": "USD/TEU",
+    "rate": "58.82（空箱20尺）",
+    "currency": "USD",
+    "note_zh": "OICT Hutchison Ports Sohar | 进口/出口空箱：20尺58.82美元，40尺78.40美元",
+    "note_en": "OICT Hutchison Ports Sohar | Empty container: 20ft 59 USD, 40ft 78 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "码头装卸费（THC）",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "美元/TEU",
+    "basis_en": "USD/TEU",
+    "rate": "74.15（转船重箱20尺）",
+    "currency": "USD",
+    "note_zh": "OICT Hutchison Ports Sohar | 转船重箱：20尺74.15美元，40尺98.87美元",
+    "note_en": "OICT Hutchison Ports Sohar | Transshipment laden: 20ft 74 USD, 40ft 99 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "码头装卸费（THC）",
+    "fee_en": "Terminal Handling Charge (THC)",
+    "basis_zh": "美元/TEU",
+    "basis_en": "USD/TEU",
+    "rate": "37.07（转船空箱20尺）",
+    "currency": "USD",
+    "note_zh": "OICT Hutchison Ports Sohar | 转船空箱：20尺37.07美元，40尺49.43美元",
+    "note_en": "OICT Hutchison Ports Sohar | Transshipment empty: 20ft 37 USD, 40ft 49 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "冷藏箱费",
+    "fee_en": "Reefer Container Charge",
+    "basis_zh": "美元/TEU·天",
+    "basis_en": "USD/TEU/day",
+    "rate": "28.00（插电+监控/天）",
+    "currency": "USD",
+    "note_zh": "OICT | 冷藏箱插电10.77+监控6.00/天；空冷藏箱PTI10.77+预冷10.77；移泊/通电另计",
+    "note_en": "OICT | Reefer plug-in 10.77 + monitoring 6.00/day; empty reefer PTI 10.77 + pre-cool 10.77",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "堆存费（重箱）",
+    "fee_en": "Storage - Laden Container",
+    "basis_zh": "美元/TEU·天",
+    "basis_en": "USD/TEU/day",
+    "rate": "0（免堆7天）",
+    "currency": "USD",
+    "note_zh": "OICT | 免堆期7天；第8-14天：20尺15.43美元/40尺30.84美元；第15-21天：20尺18.31美元/40尺36.62美元；超21天递增",
+    "note_en": "OICT | Free 7 days; Day 8-14: 20ft 15 USD/40ft 31 USD; Day 15-21: 20ft 18 USD/40ft 37 USD; beyond increasing",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "堆存费（空箱）",
+    "fee_en": "Storage - Empty Container",
+    "basis_zh": "美元/TEU·天",
+    "basis_en": "USD/TEU/day",
+    "rate": "0（免堆7天）",
+    "currency": "USD",
+    "note_zh": "OICT | 免堆期7天；第8-14天：20尺1.30美元/40尺2.59美元；15天+：20尺1.72美元/40尺3.45美元",
+    "note_en": "OICT | Free 7 days; Day 8-14: 20ft 1.30 USD/40ft 2.59 USD; Day 15+: 20ft 1.72 USD/40ft 3.45 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "码头其他服务",
+    "fee_en": "Other Terminal Services",
+    "basis_zh": "美元/票",
+    "basis_en": "USD/transaction",
+    "rate": "28.00（ESN/CRO）",
+    "currency": "USD",
+    "note_zh": "OICT | ESN出口船务单28美元；CRO货物放行单28美元；文件费：20尺0.64/40尺1.66美元",
+    "note_en": "OICT | ESN 28 USD; CRO 28 USD; Documentation: 20ft 0.64 USD, 40ft 1.66 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "卡车装卸费",
+    "fee_en": "Truck Loading/Unloading",
+    "basis_zh": "美元/箱",
+    "basis_en": "USD/container",
+    "rate": "13.00（20尺）；26.00（40尺）",
+    "currency": "USD",
+    "note_zh": "OICT | 卡车装卸：20尺13美元，40尺26美元（重箱）",
+    "note_en": "OICT | Per laden container: 20ft 13 USD, 40ft 26 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "货物检验费",
+    "fee_en": "Inspection Charge",
+    "basis_zh": "美元/箱",
+    "basis_en": "USD/container",
+    "rate": "57.20（普通货物，1小时内）",
+    "currency": "USD",
+    "note_zh": "OICT | 1小时内检验57.20美元；1-4小时80.60美元；超时加班13美元/人·小时；移箱至查验区70.01美元/次",
+    "note_en": "OICT | <=1 hr: 57 USD; 1-4 hrs: 81 USD; extra labour: 13 USD/hr; shift to inspection: 70 USD/move",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "集装箱扫描/检验服务",
+    "fee_en": "Container Scanning / Inspection",
+    "basis_zh": "美元/箱·次",
+    "basis_en": "USD/container/scan",
+    "rate": "36.40（扫描）",
+    "currency": "USD",
+    "note_zh": "OICT | 集装箱扫描36.40美元/箱；放射性探测5.20美元/箱；农业检验33.45美元/箱",
+    "note_en": "OICT | Container scan: 36.40 USD; radioactive detection: 5.20 USD; agriculture inspection: 33.45 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  },
+  {
+    "region": "middle_east",
+    "port_zh": "苏哈尔港（OICT集装箱码头）",
+    "port_en": "Sohar - OICT Container Terminal",
+    "country_zh": "阿曼",
+    "country_en": "Oman",
+    "fee_zh": "超重/超限附加费",
+    "fee_en": "Out-of-Gauge Surcharge",
+    "basis_zh": "美元/箱",
+    "basis_en": "USD/container",
+    "rate": "77.01（进口重箱40尺）",
+    "currency": "USD",
+    "note_zh": "OICT | 进口超限箱：20尺56.03美元，40尺77.01美元；误报/迟到/未申报罚款：130美元",
+    "note_en": "OICT | Import OOG: 20ft 56 USD, 40ft 77 USD; misdeclaration penalty: 130 USD",
+    "source": "OICT Tariff Book 2026 v1.0 - Hutchison Ports Sohar",
+    "src_url": "https://hutchisonportssohar.com",
+    "pricing_type": "market"
+  }
+]
+
+
+// ===== FILTER STATE =====
+let activeRegion = 'all';
+let currentPage = 1;
+const PAGE_SIZE = 20;
+
+const REGION_TABS = [
+  {id:'all',     zh:'全部 All'},
+  {id:'china',   zh:'🇨🇳 中国大陆'},
+  {id:'taiwan',  zh:'🇹🇼 台湾'},
+  {id:'hk',      zh:'🇭🇰 香港'},
+  {id:'sea',     zh:'🌏 东南亚'},
+  {id:'redsea',  zh:'🔴 红海'},
+  {id:'turkey',  zh:'🇹🇷 土耳其'},
+  {id:'blacksea',zh:'🌊 黑海'},
+];
+
+function initRegionTabs() {
+  const container = document.getElementById('region-tabs');
+  container.innerHTML = '';
+  REGION_TABS.forEach(tab => {
+    const btn = document.createElement('button');
+    btn.className = 'region-tab' + (tab.id === activeRegion ? ' active' : '');
+    btn.textContent = tab.zh;
+    btn.onclick = () => {
+      activeRegion = tab.id;
+      currentPage = 1;
+      initRegionTabs();
+      renderTable();
+    };
+    container.appendChild(btn);
   });
-</script>
+}
 
+function getFilteredData() {
+  const kw = document.getElementById('inp-kw').value.trim().toLowerCase();
+  const feeType = document.getElementById('sel-type').value;
+  const currency = document.getElementById('sel-currency').value;
+  const tabRegion = activeRegion;
+
+  return DATA.filter(d => {
+    if (tabRegion !== 'all' && d.region !== tabRegion) return false;
+
+    if (feeType !== 'all') {
+      const keywords = {
+        port: ['港口费','port dues','港务费'],
+        pilotage: ['引航费','pilotage'],
+        towage: ['拖轮费','towage'],
+        mooring: ['系泊费','mooring','系解缆'],
+        thc: ['码头操作费','thc','terminal handling charge'],
+        berth: ['泊位费','berth dues','停泊费'],
+      };
+      const kws = keywords[feeType] || [];
+      const feeStr = (d.fee_zh + d.fee_en).toLowerCase();
+      if (!kws.some(k => feeStr.includes(k))) return false;
+    }
+
+    if (currency !== 'all') {
+      if (currency === 'local') {
+        const std = ['USD','EUR','CNY','HKD','SGD','NTD','MYR','IDR','PHP','THB','VND','SAR','JOD','DJF','BGN','UAH','RUB'];
+        if (std.includes(d.currency)) return false;
+      } else {
+        if (!d.currency.includes(currency)) return false;
+      }
+    }
+
+    if (kw) {
+      const searchStr = [
+        d.port_zh, d.port_en, d.country_zh, d.country_en,
+        d.fee_zh, d.fee_en, d.note_zh, d.note_en, d.source
+      ].join(' ').toLowerCase();
+      if (!searchStr.includes(kw)) return false;
+    }
+    return true;
+  });
+}
+
+function renderTable() {
+  const filtered = getFilteredData();
+  const tbody = document.getElementById('tbody');
+  const noRes = document.getElementById('no-results');
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  if (currentPage > totalPages) currentPage = totalPages || 1;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageData = filtered.slice(start, start + PAGE_SIZE);
+
+  const marketCount = filtered.filter(d => d.pricing_type === 'market').length;
+  const stats = document.getElementById('stats');
+  stats.innerHTML = `
+    <div class="stat-chip"><strong>${filtered.length}</strong> 条 / records</div>
+    <div class="stat-chip"><strong>${new Set(filtered.map(d=>d.port_zh)).size}</strong> 港口 / ports</div>
+    <div class="stat-chip"><strong>${new Set(filtered.map(d=>d.country_zh)).size}</strong> 国家 / countries</div>
+    ${marketCount > 0 ? `<div class="stat-chip" style="background:#fff8e1;"><strong style="color:#e65100">${marketCount}</strong> 市场调节价 / mkt price</div>` : ''}
+    <div class="stat-chip" style="color:var(--muted);">更新：2025-04-14</div>
+  `;
+
+  noRes.style.display = filtered.length === 0 ? '' : 'none';
+
+  const regionMap = currentLang==='zh'
+    ? {china:'🇨🇳 中国大陆',taiwan:'🇹🇼 台湾',hk:'🇭🇰 香港',sea:'🌏 东南亚',redsea:'🔴 红海',turkey:'🇹🇷 土耳其',blacksea:'🌊 黑海'}
+    : {china:'🇨🇳 China',taiwan:'🇹🇼 Taiwan',hk:'🇭🇰 HK',sea:'🌏 SE Asia',redsea:'🔴 Red Sea',turkey:'🇹🇷 Turkey',blacksea:'🌊 Black Sea'};
+
+  tbody.innerHTML = pageData.map(d => {
+    const isMarket = d.pricing_type === 'market';
+    const regionLabel = regionMap[d.region] || d.region;
+    const sourceHtml = d.src_url
+      ? `<a class="source-link" href="${d.src_url}" target="_blank">${d.source}</a>`
+      : `<span style="color:var(--muted)">${d.source}</span>`;
+    const pricingBadge = isMarket
+      ? `<span class="pricing-badge badge-market">${currentLang==='zh'?'市场':'Mkt'}</span>`
+      : `<span class="pricing-badge badge-gov">${currentLang==='zh'?'政府':'Gov'}</span>`;
+    const rateDisplay = isMarket
+      ? `<span class="market-note">${d.rate}</span>`
+      : `<span class="rate-cell">${d.rate} <small>${d.currency}</small></span>`;
+    return `<tr>
+      <td>${regionLabel}</td>
+      <td><strong>${currentLang==='zh' ? d.port_zh : d.port_en}</strong></td>
+      <td>${currentLang==='zh' ? d.country_zh : d.country_en}</td>
+      <td><span class="fee-badge">${currentLang==='zh' ? d.fee_zh : d.fee_en}</span></td>
+      <td>${rateDisplay}</td>
+      <td>${currentLang==='zh' ? d.basis_zh : d.basis_en}</td>
+      <td><div>${currentLang==='zh' ? d.note_zh : d.note_en}</div></td>
+      <td>${pricingBadge}</td>
+      <td>${sourceHtml}</td>
+    </tr>`;
+  }).join('');
+
+  // Pagination
+  const pg = document.getElementById('pagination');
+  if (filtered.length === 0) { pg.innerHTML = ''; return; }
+  let pbtns = `<button class="page-btn" ${currentPage<=1?'disabled':''} onclick="currentPage--;renderTable()">‹ Prev</button>`;
+  for (let i=1; i<=totalPages; i++) {
+    if (totalPages > 7 && Math.abs(i-currentPage) > 2 && i !== 1 && i !== totalPages) {
+      if (i === 2 || i === totalPages-1) pbtns += '<span style="padding:6px;color:var(--muted)">…</span>';
+      continue;
+    }
+    pbtns += `<button class="page-btn ${i===currentPage?'active':''}" onclick="currentPage=${i};renderTable()">${i}</button>`;
+  }
+  pbtns += `<button class="page-btn" ${currentPage>=totalPages?'disabled':''} onclick="currentPage++;renderTable()">Next ›</button>`;
+  pg.innerHTML = `<div class="page-info">${start+1}–${Math.min(start+PAGE_SIZE,filtered.length)} / ${filtered.length}</div><div class="page-btns">${pbtns}</div>`;
+}
+
+// Event listeners
+document.getElementById('sel-type').addEventListener('change', () => { currentPage=1; renderTable(); });
+document.getElementById('sel-currency').addEventListener('change', () => { currentPage=1; renderTable(); });
+document.getElementById('inp-kw').addEventListener('input', () => { currentPage=1; renderTable(); });
+
+// ===== EXPORT CSV =====
+function exportCSV() {
+  const filtered = getFilteredData();
+  if (filtered.length === 0) { alert('无数据可导出 / No data to export'); return; }
+  const headers = ['区域','港口','国家','费用类型','费率','货币','计费单位','备注','定价性质','来源'];
+  const rows = filtered.map(d => [
+    d.region, currentLang==='zh' ? d.port_zh : d.port_en,
+    currentLang==='zh' ? d.country_zh : d.country_en,
+    currentLang==='zh' ? d.fee_zh : d.fee_en,
+    d.rate, d.currency,
+    currentLang==='zh' ? d.basis_zh : d.basis_en,
+    currentLang==='zh' ? d.note_zh : d.note_en,
+    d.pricing_type === 'market' ? (currentLang==='zh'?'市场调节价':'Market price') : (currentLang==='zh'?'政府定价/指导价':'Gov regulated'),
+    d.source
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(v => `"${(v||'').toString().replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const BOM = '\uFEFF';
+  const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `port-tariff-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// Init
+initRegionTabs();
+renderTable();
+
+</script>
 </body>
 </html>
